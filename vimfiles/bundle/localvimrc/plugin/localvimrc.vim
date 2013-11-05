@@ -267,7 +267,7 @@ function! s:LocalVimRC()
   endfor
 
   " clear command line
-  redraw!
+  "redraw!
 
   " make information persistent
   call s:LocalVimRCWritePersistent()
