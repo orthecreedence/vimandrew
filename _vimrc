@@ -174,7 +174,7 @@ nmap <Leader>x <Plug>BufKillBw
 let g:BufKillActionWhenBufferDisplayedInAnotherWindow = 'kill'
 
 " toggle between relative and absolute line numbering with <Leader>n
-nnoremap <Leader>n :call NumberToggle()<cr>
+nnoremap <Leader>n :set rnu!<CR>
 
 nmap <Leader>u :UndotreeToggle<CR>
 
@@ -314,7 +314,8 @@ else
 endif
 
 " Remove menu bar, graphical tabs (text tabs take up less spaceeeee)
-set guioptions-=em
+set guioptions-=m
+set guioptions-=e
 nmap <Leader>menu :set guioptions+=m<CR>
 
 " Remove scroll bars
