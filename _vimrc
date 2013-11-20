@@ -313,8 +313,8 @@ else
 	endif
 endif
 
-" Remove menu bar
-set guioptions-=m
+" Remove menu bar, graphical tabs (text tabs take up less spaceeeee)
+set guioptions-=em
 nmap <Leader>menu :set guioptions+=m<CR>
 
 " Remove scroll bars
