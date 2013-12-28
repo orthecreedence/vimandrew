@@ -72,7 +72,7 @@ set tabstop=4
 " ...but 2 spaces for lisp
 autocmd FileType lisp setlocal expandtab
 autocmd FileType lisp setlocal tabstop=2
-au BufNewFile,BufRead *.md set filetype=markdown
+autocmd BufNewFile,BufRead *.asd set filetype=lisp
 
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
