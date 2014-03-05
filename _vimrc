@@ -332,6 +332,15 @@ nmap <Leader>scroll :set guioptions+=Lr<CR>
 " Remove toolbar
 set guioptions-=T
 
+" don't make a bunch of annoying windows and prompts pop up for each remote
+" edit
+let g:netrw_silent=1
+
+if has("win32") || has("win16")
+	let g:netrw_cygwin = 0
+	let g:netrw_scp_cmd = "c:\\tools\\putty\\pscp.exe"
+endif
+
 " add a word processing function
 function! WordProcessorMode()
 	setlocal linebreak
