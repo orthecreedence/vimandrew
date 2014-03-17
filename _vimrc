@@ -17,7 +17,7 @@ set backupcopy=yes
 
 " allow typing jj quickly to map to Esc 
 inoremap kj <Esc>
-inoremap jk <Esc>
+"inoremap jk <Esc>
 inoremap <C-c> <Esc>
 map ; :
 "set timeoutlen=500
