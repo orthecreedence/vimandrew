@@ -1,6 +1,9 @@
 " no backward compatibility w/ vi
 set nocompatible
 
+" make viminfo forget the last files edited
+set viminfo='0,/0,:0,<0,@0,f0
+
 " make vim act like any mswindows (or ANY) editor...lots of useful stuff, like 
 " shift text selection, movement/deletion line wrapping and the like. lots of
 " shorcuts to keep you from having to switch from insert to visual/command 
