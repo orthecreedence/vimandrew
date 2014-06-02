@@ -82,6 +82,8 @@ autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 autocmd BufRead,BufNewFile *.md set ft=markdown
 
+autocmd BufRead,BufNewFile *.dust,*.dustjs,*.tl set filetype=dustjs
+
 " indenting based on filetype
 filetype indent on
 filetype plugin on
