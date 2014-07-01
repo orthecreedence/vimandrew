@@ -1,7 +1,7 @@
 " paredit.vim:
 "               Paredit mode for Slimv
-" Version:      0.9.10
-" Last Change:  02 Jan 2013
+" Version:      0.9.13
+" Last Change:  05 May 2014
 " Maintainer:   Tamas Kovacs <kovisoft at gmail dot com>
 " License:      This file is placed in the public domain.
 "               No warranty, express or implied.
@@ -64,7 +64,7 @@ endif
 " =====================================================================
 
 " Skip matches inside string or comment or after '\'
-let s:skip_sc = '(synIDattr(synID(line("."), col("."), 0), "name") =~ "[Ss]tring\\|[Cc]omment\\|[Ss]pecial" || getline(line("."))[col(".")-2] == "\\")'
+let s:skip_sc = '(synIDattr(synID(line("."), col("."), 0), "name") =~ "[Ss]tring\\|[Cc]omment\\|[Ss]pecial\\|clojureRegexp\\|clojurePattern" || getline(line("."))[col(".")-2] == "\\")'
 
 " Valid macro prefix characters
 let s:any_macro_prefix   = "'" . '\|`\|#\|@\|\~\|,\|\^'
@@ -77,13 +77,12 @@ let s:yank_pos           = []
 " =====================================================================
 "  General utility functions
 " =====================================================================
-
 " Buffer specific initialization
 function! PareditInitBuffer()
     let b:paredit_init = 1
     " in case they are accidentally removed
     " Also define regular expressions to identify special characters used by paredit
-    if &ft =~ '.*\(clojure\|scheme\).*'
+    if &ft =~ '.*\(clojure\|scheme\|racket\).*'
         let b:any_matched_char   = '(\|)\|\[\|\]\|{\|}\|\"'
         let b:any_matched_pair   = '()\|\[\]\|{}\|\"\"'
         let b:any_opening_char   = '(\|\[\|{'
@@ -108,7 +107,7 @@ function! PareditInitBuffer()
         inoremap <buffer> <expr>   "            PareditInsertQuotes()
         inoremap <buffer> <expr>   <BS>         PareditBackspace(0)
         inoremap <buffer> <expr>   <Del>        PareditDel()
-        if &ft =~ '.*\(clojure\|scheme\).*' && g:paredit_smartjump
+        if &ft =~ '.*\(clojure\|scheme\|racket\).*' && g:paredit_smartjump
             nnoremap <buffer> <silent> (            :<C-U>call PareditSmartJumpOpening(0)<CR>
             nnoremap <buffer> <silent> )            :<C-U>call PareditSmartJumpClosing(0)<CR>
             vnoremap <buffer> <silent> (            <Esc>:<C-U>call PareditSmartJumpOpening(1)<CR>
@@ -121,11 +120,12 @@ function! PareditInitBuffer()
         endif
         nnoremap <buffer> <silent> [[           :<C-U>call PareditFindDefunBck()<CR>
         nnoremap <buffer> <silent> ]]           :<C-U>call PareditFindDefunFwd()<CR>
-        nnoremap <buffer> <silent> x            :<C-U>call PareditEraseFwd()<CR>
+
+        call RepeatableNNoRemap('x', ':<C-U>call PareditEraseFwd()')
         nnoremap <buffer> <silent> <Del>        :<C-U>call PareditEraseFwd()<CR>
-        nnoremap <buffer> <silent> X            :<C-U>call PareditEraseBck()<CR>
+        call RepeatableNNoRemap('X', ':<C-U>call PareditEraseBck()')
         nnoremap <buffer> <silent> s            :<C-U>call PareditEraseFwd()<CR>i
-        nnoremap <buffer> <silent> D            v$:<C-U>call PareditDelete(visualmode(),1)<CR>
+        call RepeatableNNoRemap('D', 'v$:<C-U>call PareditDelete(visualmode(),1)')
         nnoremap <buffer> <silent> C            v$:<C-U>call PareditChange(visualmode(),1)<CR>
         nnoremap <buffer> <silent> d            :<C-U>call PareditSetDelete(v:count)<CR>g@
         vnoremap <buffer> <silent> d            :<C-U>call PareditDelete(visualmode(),1)<CR>
@@ -133,43 +133,43 @@ function! PareditInitBuffer()
         vnoremap <buffer> <silent> <Del>        :<C-U>call PareditDelete(visualmode(),1)<CR>
         nnoremap <buffer> <silent> c            :set opfunc=PareditChange<CR>g@
         vnoremap <buffer> <silent> c            :<C-U>call PareditChange(visualmode(),1)<CR>
-        nnoremap <buffer> <silent> dd           :<C-U>call PareditDeleteLines()<CR>
+        call RepeatableNNoRemap('dd', ':<C-U>call PareditDeleteLines()')
         nnoremap <buffer> <silent> cc           :<C-U>call PareditChangeLines()<CR>
         nnoremap <buffer> <silent> cw           :<C-U>call PareditChangeSpec('cw',1)<CR>
         nnoremap <buffer> <silent> cW           :set opfunc=PareditChange<CR>g@E
         nnoremap <buffer> <silent> cb           :<C-U>call PareditChangeSpec('cb',0)<CR>
         nnoremap <buffer> <silent> ciw          :<C-U>call PareditChangeSpec('ciw',1)<CR>
         nnoremap <buffer> <silent> caw          :<C-U>call PareditChangeSpec('caw',1)<CR>
-        nnoremap <buffer> <silent> p            :<C-U>call PareditPut('p')<CR>
-        nnoremap <buffer> <silent> P            :<C-U>call PareditPut('P')<CR>
-        execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'w(  :<C-U>call PareditWrap("(",")")<CR>'
+        call RepeatableNNoRemap('p', ':<C-U>call PareditPut("p")')
+        call RepeatableNNoRemap('P', ':<C-U>call PareditPut("P")')
+        call RepeatableNNoRemap(g:paredit_leader . 'w(', ':<C-U>call PareditWrap("(",")")')
         execute 'vnoremap <buffer> <silent> ' . g:paredit_leader.'w(  :<C-U>call PareditWrapSelection("(",")")<CR>'
-        execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'w"  :<C-U>call PareditWrap('."'".'"'."','".'"'."')<CR>"
+        call RepeatableNNoRemap(g:paredit_leader . 'w"', ':<C-U>call PareditWrap('."'".'"'."','".'"'."')")
         execute 'vnoremap <buffer> <silent> ' . g:paredit_leader.'w"  :<C-U>call PareditWrapSelection('."'".'"'."','".'"'."')<CR>"
         " Spliec s-expression killing backward/forward
         execute 'nmap     <buffer> <silent> ' . g:paredit_leader.'<Up>    d[(,S'
         execute 'nmap     <buffer> <silent> ' . g:paredit_leader.'<Down>  d])%,S'
-        execute 'nmap     <buffer> <silent> ' . g:paredit_leader.'I   :<C-U>call PareditRaise()<CR>'
-        if &ft =~ '.*\(clojure\|scheme\).*'
+        call RepeatableNNoRemap(g:paredit_leader . 'I', ':<C-U>call PareditRaise()')
+        if &ft =~ '.*\(clojure\|scheme\|racket\).*'
             inoremap <buffer> <expr>   [            PareditInsertOpening('[',']')
             inoremap <buffer> <silent> ]            <C-R>=(pumvisible() ? "\<lt>C-Y>" : "")<CR><C-O>:let save_ve=&ve<CR><C-O>:set ve=all<CR><C-O>:<C-U>call PareditInsertClosing('[',']')<CR><C-O>:let &ve=save_ve<CR>
             inoremap <buffer> <expr>   {            PareditInsertOpening('{','}')
             inoremap <buffer> <silent> }            <C-R>=(pumvisible() ? "\<lt>C-Y>" : "")<CR><C-O>:let save_ve=&ve<CR><C-O>:set ve=all<CR><C-O>:<C-U>call PareditInsertClosing('{','}')<CR><C-O>:let &ve=save_ve<CR>
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'w[  :<C-U>call PareditWrap("[","]")<CR>'
+            call RepeatableNNoRemap(g:paredit_leader . 'w[', ':<C-U>call PareditWrap("[","]")')
             execute 'vnoremap <buffer> <silent> ' . g:paredit_leader.'w[  :<C-U>call PareditWrapSelection("[","]")<CR>'
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'w{  :<C-U>call PareditWrap("{","}")<CR>'
+            call RepeatableNNoRemap(g:paredit_leader . 'w{', ':<C-U>call PareditWrap("{","}")')
             execute 'vnoremap <buffer> <silent> ' . g:paredit_leader.'w{  :<C-U>call PareditWrapSelection("{","}")<CR>'
         endif
 
         if g:paredit_shortmaps
             " Shorter keymaps: old functionality of KEY is remapped to <Leader>KEY
-            nnoremap <buffer> <silent> <            :<C-U>call PareditMoveLeft()<CR>
-            nnoremap <buffer> <silent> >            :<C-U>call PareditMoveRight()<CR>
-            nnoremap <buffer> <silent> O            :<C-U>call PareditSplit()<CR>
-            nnoremap <buffer> <silent> J            :<C-U>call PareditJoin()<CR>
-            nnoremap <buffer> <silent> W            :<C-U>call PareditWrap('(',')')<CR>
+            call RepeatableNNoRemap('<', ':<C-U>call PareditMoveLeft()') 
+            call RepeatableNNoRemap('>', ':<C-U>call PareditMoveRight()') 
+            call RepeatableNNoRemap('O', ':<C-U>call PareditSplit()') 
+            call RepeatableNNoRemap('J', ':<C-U>call PareditJoin()') 
+            call RepeatableNNoRemap('W', ':<C-U>call PareditWrap("(",")")') 
             vnoremap <buffer> <silent> W            :<C-U>call PareditWrapSelection('(',')')<CR>
-            nnoremap <buffer> <silent> S            :<C-U>call PareditSplice()<CR>
+            call RepeatableNNoRemap('S', ':<C-U>call PareditSplice()') 
             execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'<  :<C-U>normal! <<CR>'
             execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'>  :<C-U>normal! ><CR>'
             execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'O  :<C-U>normal! O<CR>'
@@ -180,13 +180,13 @@ function! PareditInitBuffer()
         else
             " Longer keymaps with <Leader> prefix
             nnoremap <buffer> <silent> S            V:<C-U>call PareditChange(visualmode(),1)<CR>
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'<  :<C-U>call PareditMoveLeft()<CR>'
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'>  :<C-U>call PareditMoveRight()<CR>'
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'O  :<C-U>call PareditSplit()<CR>'
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'J  :<C-U>call PareditJoin()<CR>'
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'W  :<C-U>call PareditWrap("(",")")<CR>'
+            call RepeatableNNoRemap(g:paredit_leader . '<', ':<C-U>call PareditMoveLeft()') 
+            call RepeatableNNoRemap(g:paredit_leader . '>', ':<C-U>call PareditMoveRight()') 
+            call RepeatableNNoRemap(g:paredit_leader . 'O', ':<C-U>call PareditSplit()') 
+            call RepeatableNNoRemap(g:paredit_leader . 'J', ':<C-U>call PareditJoin()') 
+            call RepeatableNNoRemap(g:paredit_leader . 'W', ':<C-U>call PareditWrap("(",")")') 
             execute 'vnoremap <buffer> <silent> ' . g:paredit_leader.'W  :<C-U>call PareditWrapSelection("(",")")<CR>'
-            execute 'nnoremap <buffer> <silent> ' . g:paredit_leader.'S  :<C-U>call PareditSplice()<CR>'
+            call RepeatableNNoRemap(g:paredit_leader . 'S', ':<C-U>call PareditSplice()') 
         endif
 
         if g:paredit_electric_return && mapcheck( "<CR>", "i" ) == ""
@@ -219,7 +219,7 @@ function! PareditInitBuffer()
         silent! unmap  <buffer> cb
         silent! unmap  <buffer> ciw
         silent! unmap  <buffer> caw
-        if &ft =~ '.*\(clojure\|scheme\).*'
+        if &ft =~ '.*\(clojure\|scheme\|racket\).*'
             silent! iunmap <buffer> [
             silent! iunmap <buffer> ]
             silent! iunmap <buffer> {
@@ -232,10 +232,26 @@ function! PareditInitBuffer()
     endif
 endfunction
 
+" Run the command normally but append a call to repeat#set afterwards
+function! RepeatableMap(map_type, keys, command)
+  let escaped_keys = substitute(a:keys, '["<]', '\\\0', "g")
+  execute a:map_type . ' <silent> <buffer> ' .
+        \ a:keys . ' ' . a:command .
+        \ '\|silent! call repeat#set("' . escaped_keys . '")<CR>'
+endfunction
+
+function! RepeatableNMap(keys, command)
+  call RepeatableMap('nmap', a:keys, a:command)
+endfunction
+
+function! RepeatableNNoRemap(keys, command)
+  call RepeatableMap('nnoremap', a:keys, a:command)
+endfunction
+
 " Include all prefix and special characters in 'iskeyword'
 function! s:SetKeyword()
     let old_value = &iskeyword
-    if &ft =~ '.*\(clojure\|scheme\).*'
+    if &ft =~ '.*\(clojure\|scheme\|racket\).*'
         setlocal iskeyword+=+,-,*,/,%,<,=,>,:,$,?,!,@-@,94,~,#,\|,&
     else
         setlocal iskeyword+=+,-,*,/,%,<,=,>,:,$,?,!,@-@,94,~,#,\|,&,.,{,},[,]
@@ -341,7 +357,6 @@ endfunction
 
 " General change operator handling
 function! PareditChange( type, ... )
-    let startcol = col('.')
     let ve_save = &virtualedit
     set virtualedit=all
     call PareditOpfunc( 'c', a:type, a:0 )
@@ -353,8 +368,8 @@ function! PareditChange( type, ... )
             let expr = 'lispindent(v:lnum)'
         endif
         execute "call setline( v:lnum, repeat( ' ', " . expr . " ) )"
-        normal! $l
-    elseif startcol > 1
+        call cursor(v:lnum, len(getline(v:lnum))+1)
+    else
         normal! l
     endif
     startinsert
@@ -480,6 +495,12 @@ function! s:InsideComment( ... )
         let line = substitute( line, '"[^"]*"', '', 'g' )
         return match( line, ';' ) >= 0
     endif
+    if s:SynIDMatch( 'clojureComment', l, c, 1 )
+        if strpart( getline(l), c-1, 2 ) == '#_' || strpart( getline(l), c-2, 2 ) == '#_'
+            " This is a commented out clojure form of type #_(...), treat it as regular form
+            return 0
+        endif
+    endif
     return s:SynIDMatch( '[Cc]omment', l, c, 1 )
 endfunction
 
@@ -495,14 +516,13 @@ function! s:InsideString( ... )
         let quotes = substitute( line, '[^"]', '', 'g' )
         return len(quotes) % 2
     endif
-    return s:SynIDMatch( '[Ss]tring', l, c, 0 )
+    " VimClojure and vim-clojure-static define special syntax for regexps
+    return s:SynIDMatch( '[Ss]tring\|clojureRegexp\|clojurePattern', l, c, 0 )
 endfunction
 
 " Is this a Slimv or VimClojure REPL buffer?
 function! s:IsReplBuffer()
-    if exists( 'g:slimv_repl_name' )
-        return bufnr( g:slimv_repl_name ) == bufnr( '%' )
-    elseif exists( 'b:vimclojure_repl' )
+    if exists( 'b:slimv_repl_buffer' ) || exists( 'b:vimclojure_repl' )
         return 1
     else
         return 0
@@ -551,7 +571,7 @@ function! s:IsBalanced()
         return 0
     endif
 
-    if &ft =~ '.*\(clojure\|scheme\).*'
+    if &ft =~ '.*\(clojure\|scheme\|racket\).*'
         let b1 = searchpair( '\[', '', '\]', 'brnmW', s:skip_sc, matchb )
         let b2 = searchpair( '\[', '', '\]',  'rnmW', s:skip_sc, matchf )
         if !(b1 == b2) && !(b1 == b2 - 1 && line[c-1] == '[') && !(b1 == b2 + 1 && line[c-1] == ']')
@@ -614,7 +634,7 @@ function! s:Unbalanced( matched )
     while 1
         let matched = tmp
         let tmp = substitute( tmp, '(\(\s*\))',   ' \1 ', 'g')
-        if &ft =~ '.*\(clojure\|scheme\).*'
+        if &ft =~ '.*\(clojure\|scheme\|racket\).*'
             let tmp = substitute( tmp, '\[\(\s*\)\]', ' \1 ', 'g')
             let tmp = substitute( tmp, '{\(\s*\)}',   ' \1 ', 'g')
         endif
@@ -622,7 +642,7 @@ function! s:Unbalanced( matched )
         if tmp == matched
             " All paired chars eliminated
             let tmp = substitute( tmp, ')\(\s*\)(',   ' \1 ', 'g')
-            if &ft =~ '.*\(clojure\|scheme\).*'
+            if &ft =~ '.*\(clojure\|scheme\|racket\).*'
                 let tmp = substitute( tmp, '\]\(\s*\)\[', ' \1 ', 'g')
                 let tmp = substitute( tmp, '}\(\s*\){',   ' \1 ', 'g')
             endif
@@ -667,7 +687,9 @@ function! PareditFindClosing( open, close, select )
         call searchpair( open, '', close, 'bW', s:skip_sc )
         normal! v
         call searchpair( open, '', close, 'W', s:skip_sc )
-        normal! l
+        if &selection != 'inclusive'
+            normal! l
+        endif
     else
         call searchpair( open, '', close, 'W', s:skip_sc )
     endif
@@ -785,7 +807,7 @@ function! s:ReGatherUp()
             normal! ddk
         endwhile
         normal! Jl
-    elseif g:paredit_electric_return && getline('.') =~ '^\s*\(\]\|}\)' && &ft =~ '.*\(clojure\|scheme\).*' 
+    elseif g:paredit_electric_return && getline('.') =~ '^\s*\(\]\|}\)' && &ft =~ '.*\(clojure\|scheme\|racket\).*' 
         " Re-gather electric returns in the current line for ']' and '}'
         normal! k
         while getline( line('.') ) =~ '^\s*$'
@@ -840,7 +862,7 @@ function! PareditInsertClosing( open, close )
             normal! Jl
             return
         endif
-        if len(nextline) > 0 && nextline[0] =~ '\]\|}' && &ft =~ '.*\(clojure\|scheme\).*' 
+        if len(nextline) > 0 && nextline[0] =~ '\]\|}' && &ft =~ '.*\(clojure\|scheme\|racket\).*' 
             " Re-gather electric returns in the line of the closing ']' or '}'
             call setline( line('.'), substitute( line, '\s*$', '', 'g' ) )
             normal! Jxl
@@ -887,14 +909,19 @@ endfunction
 
 " Handle <Enter> keypress, insert electric return if applicable
 function! PareditEnter()
-    let line = getline( '.' )
-    let pos = col( '.' ) - 1
-    if g:paredit_electric_return && pos > 0 && line[pos] =~ b:any_closing_char && !s:InsideString() && s:IsBalanced()
-        " Electric Return
-        return "\<CR>\<CR>\<Up>"
+    if pumvisible()
+        " Pressing <CR> in a pop up selects entry.
+        return "\<C-Y>"
     else
-        " Regular Return
-        return "\<CR>"
+        let line = getline( '.' )
+        let pos = col( '.' ) - 1
+        if g:paredit_electric_return && pos > 0 && line[pos] =~ b:any_closing_char && !s:InsideString() && s:IsBalanced()
+            " Electric Return
+            return "\<CR>\<CR>\<Up>"
+        else
+            " Regular Return
+            return "\<CR>"
+        endif
     endif
 endfunction
 
@@ -976,7 +1003,7 @@ endfunction
 
 " Initialize yank position list
 function! s:InitYankPos()
-    let @" = ''
+    call setreg( &clipboard == 'unnamed' ? '*' : '"', '' ) 
     let s:yank_pos = []
 endfunction
 
@@ -1000,7 +1027,7 @@ endfunction
 function! s:EraseFwd( count, startcol )
     let line = getline( '.' )
     let pos = col( '.' ) - 1
-    let reg = @"
+    let reg = getreg( &clipboard == 'unnamed' ? '*' : '"' )
     let ve_save = &virtualedit
     set virtualedit=all
     let c = a:count
@@ -1045,14 +1072,14 @@ function! s:EraseFwd( count, startcol )
     endwhile
     let &virtualedit = ve_save
     call setline( '.', line )
-    let @" = reg
+    call setreg( &clipboard == 'unnamed' ? '*' : '"', reg ) 
 endfunction
 
 " Backward erasing a character in normal mode, do not check if current form balanced
 function! s:EraseBck( count )
     let line = getline( '.' )
     let pos = col( '.' ) - 1
-    let reg = @"
+    let reg = getreg( &clipboard == 'unnamed' ? '*' : '"' )
     let c = a:count
     while c > 0 && pos > 0
         if pos > 1 && line[pos-2] == '\' && line[pos-1] =~ b:any_matched_char && (pos < 3 || line[pos-3] != '\')
@@ -1083,7 +1110,7 @@ function! s:EraseBck( count )
         let c = c - 1
     endwhile
     call setline( '.', line )
-    let @" = reg
+    call setreg( &clipboard == 'unnamed' ? '*' : '"', reg ) 
 endfunction
 
 " Forward erasing a character in normal mode
@@ -1135,7 +1162,10 @@ function! s:PrevElement( skip_whitespc )
         " Go to previous character
         if !moved
             let [l1, c1] = [line( '.' ), col( '.' )]
+            let save_ww = &whichwrap
+            set whichwrap=
             normal! h
+            let &whichwrap = save_ww
         endif
         let moved = 0
         let [l, c] = [line( '.' ), col( '.' )]
@@ -1210,7 +1240,10 @@ function! s:NextElement( skip_whitespc )
     while 1
         " Go to next character
         let [l1, c1] = [line( '.' ), col( '.' )]
+        let save_ww = &whichwrap
+        set whichwrap=
         normal! l
+        let &whichwrap = save_ww
         let [l, c] = [line( '.' ), col( '.' )]
 
         " Skip comments
@@ -1327,6 +1360,16 @@ function! s:FindParenNearby()
     endif
 endfunction
 
+" Reindent current form
+function! PareditReindentForm()
+    let l = line('.')
+    let c = col('.')
+    let old_indent = len(matchstr(getline(l), '^\s*'))
+    normal! =ib
+    let new_indent = len(matchstr(getline(l), '^\s*'))
+    call cursor( l, c + new_indent - old_indent )
+endfunction
+
 " Move delimiter one atom or s-expression to the left
 function! PareditMoveLeft()
     call s:FindParenNearby()
@@ -1380,6 +1423,7 @@ function! PareditMoveLeft()
             normal! l
         endif
     endif
+    call PareditReindentForm()
 endfunction
 
 " Move delimiter one atom or s-expression to the right
@@ -1436,6 +1480,7 @@ function! PareditMoveRight()
         execute "normal! a "
         normal! h
     endif
+    call PareditReindentForm()
 endfunction
 
 " Find closing of the innermost structure: (...) or [...] or {...}
@@ -1459,7 +1504,7 @@ function! s:FindClosing()
     endif
     call setpos( '.', [0, l, c, 0] )
 
-    if &ft =~ '.*\(clojure\|scheme\).*'
+    if &ft =~ '.*\(clojure\|scheme\|racket\).*'
         call PareditFindClosing( '[', ']', 0 )
         let lp = line( '.' )
         let cp = col( '.' )
@@ -1594,6 +1639,11 @@ endfunction
 " Keep visual mode
 function! PareditWrapSelection( open, close )
     call s:WrapSelection( a:open, a:close )
+    " Always leave the cursor to the opening char's pos after
+    " wrapping selection.
+    if getline('.')[col('.')-1] =~ b:any_closing_char
+        normal! %
+    endif
 endfunction
 
 " Wrap current symbol in parens of the given kind
@@ -1601,15 +1651,60 @@ endfunction
 " Stand on the opening paren (if not wrapping in "")
 function! PareditWrap( open, close )
     let isk_save = s:SetKeyword()
-    if a:open != '"' && getline('.')[col('.') - 1] =~ b:any_openclose_char
+    let sel_save = &selection
+    let line = line('.')
+    let column = col('.')
+    let line_content = getline(line)
+    let current_char = line_content[column - 1]
+
+    if a:open != '"' && current_char =~ b:any_openclose_char
         execute "normal! " . "v%\<Esc>"
     else
-        execute "normal! " . "viw\<Esc>"
+        let inside_comment = s:InsideComment(line, column)
+
+        if current_char == '"' && !inside_comment
+            let escaped_quote = line_content[column - 2] == "\\"
+            if escaped_quote
+                execute "normal! " . "vh\<Esc>"
+            else
+                let is_starting_quote = 1
+                if column == 1 && line > 1
+                    let endOfPreviousLine = col([line - 1, '$'])
+                    if s:InsideString(line - 1, endOfPreviousLine - 1)
+                        let previous_line_content = getline(line - 1)
+                        if previous_line_content[endOfPreviousLine - 2] != '"'
+                            let is_starting_quote = 0
+                        elseif previous_line_content[endOfPreviousLine - 3] == "\\"
+                            let is_starting_quote = 0
+                        endif
+                    endif
+                elseif s:InsideString(line, column - 1)
+                    if line_content[column - 2] != '"'
+                        let is_starting_quote = 0
+                    elseif line_content[column - 3] == "\\"
+                        let is_starting_quote = 0
+                    endif
+                endif
+                let &selection="inclusive"
+                normal! v
+                if is_starting_quote
+                    call search( '\\\@<!"', 'W', s:skip_sc )
+                else
+                    call search( '\\\@<!"', 'bW', s:skip_sc )
+                endif
+                execute "normal! " . "\<Esc>"
+            endif
+        else
+            execute "normal! " . "viw\<Esc>"
+        endif
     endif
     call s:WrapSelection( a:open, a:close )
     if a:open != '"'
         normal! %
+    else
+      call cursor(line, column + 1)
     endif
+    let &selection = sel_save
     let &iskeyword = isk_save
 endfunction
 
@@ -1641,14 +1736,35 @@ endfunction
 " Raise: replace containing form with the current symbol or sub-form
 function! PareditRaise()
     let isk_save = s:SetKeyword()
-    if getline('.')[col('.')-1] =~ b:any_openclose_char
-        " Raise sub-form and re-indent
-        normal! y%d%dab
-        normal! "0P=%
+    let ch = getline('.')[col('.')-1]
+    if ch =~ b:any_openclose_char
+        " Jump to the closing char in order to find the outer
+        " closing char.
+        if ch =~ b:any_opening_char
+            normal! %
+        endif
+
+        let [p, l, c] = s:FindClosing()
+        if p =~ b:any_closing_char
+            " Raise sub-form and re-indent
+            exe "normal! y%d%da" . p
+            if getline('.')[col('.')-1] == ' '
+              normal! "0p=%
+            else
+              normal! "0P=%
+            endif
+        elseif ch =~ b:any_opening_char
+            " Restore position if there is no appropriate
+            " closing char.
+            normal! %
+        endif
     else
-        " Raise symbol
-        normal! yiwdab
-        normal! "0Pb
+        let [p, l, c] = s:FindClosing()
+        if p =~ b:any_closing_char
+            " Raise symbol
+            exe "normal! yiwda" . p
+            normal! "0Pb
+        endif
     endif
     let &iskeyword = isk_save
 endfunction
@@ -1657,8 +1773,16 @@ endfunction
 "  Autocommands
 " =====================================================================
 
-au FileType lisp      call PareditInitBuffer()
-au FileType *clojure* call PareditInitBuffer()
-au FileType scheme    call PareditInitBuffer()
-au FileType racket    call PareditInitBuffer()
+if !exists("g:paredit_disable_lisp")
+    au FileType lisp      call PareditInitBuffer()
+endif
+
+if !exists("g:paredit_disable_clojure")
+    au FileType *clojure* call PareditInitBuffer()
+endif
+
+if !exists("g:paredit_disable_scheme")
+    au FileType scheme    call PareditInitBuffer()
+    au FileType racket    call PareditInitBuffer()
+endif
 

@@ -1,7 +1,7 @@
 " slimv-lisp.vim:
 "               Lisp filetype plugin for Slimv
-" Version:      0.9.8
-" Last Change:  01 Jun 2012
+" Version:      0.9.13
+" Last Change:  04 May 2014
 " Maintainer:   Tamas Kovacs <kovisoft at gmail dot com>
 " License:      This file is placed in the public domain.
 "               No warranty, express or implied.
@@ -36,35 +36,39 @@ let g:slimv_lisp_loaded = 1
 "     platform    - 'w' (Windows) or 'l' (Linux = non-Windows), '' for all
 "     search path - commma separated list, may contain wildcard characters
 let s:lisp_desc = [
-\ [ 'sbcl',        'sbcl',      '',  '' ],
-\ [ 'clisp',       'clisp',     '',  '' ],
-\ [ 'gcl',         'clisp',     '',  '' ],
-\ [ 'cmucl',       'cmu',       '',  '' ],
-\ [ 'ecl',         'ecl',       '',  '' ],
-\ [ 'acl',         'allegro',   '',  '' ],
-\ [ 'mlisp',       'allegro',   '',  '' ],
-\ [ 'mlisp8',      'allegro',   '',  '' ],
-\ [ 'alisp',       'allegro',   '',  '' ],
-\ [ 'alisp8',      'allegro',   '',  '' ],
-\ [ 'lwl',         'lispworks', '',  '' ],
-\ [ 'ccl',         'clozure',   '',  '' ],
-\ [ 'wx86cl',      'clozure',   'w', '' ],
-\ [ 'lx86cl',      'clozure',   'l', '' ],
-\ [ '*lisp.exe',   'clisp',     'w',
+\ [ 'sbcl',         'sbcl',      '',    '' ],
+\ [ 'clisp',        'clisp',     '',    '' ],
+\ [ 'gcl',          'clisp',     '',    '' ],
+\ [ 'cmucl',        'cmu',       '',    '' ],
+\ [ 'ecl',          'ecl',       '',    '' ],
+\ [ 'acl',          'allegro',   '',    '' ],
+\ [ 'mlisp',        'allegro',   '',    '' ],
+\ [ 'mlisp8',       'allegro',   '',    '' ],
+\ [ 'alisp',        'allegro',   '',    '' ],
+\ [ 'alisp8',       'allegro',   '',    '' ],
+\ [ 'lwl',          'lispworks', '',    '' ],
+\ [ 'ccl',          'clozure',   '',    '' ],
+\ [ 'wx86cl64',     'clozure',   'w64', '' ],
+\ [ 'wx86cl',       'clozure',   'w',   '' ],
+\ [ 'lx86cl',       'clozure',   'l',   '' ],
+\ [ '*lisp.exe',    'clisp',     'w',
 \   'c:/*lisp*,c:/*lisp*/*,c:/*lisp*/bin/*,c:/Program Files/*lisp*,c:/Program Files/*lisp*/*,c:/Program Files/*lisp*/bin/*' ],
-\ [ 'gcl.exe',     'clisp',     'w', 'c:/gcl*,c:/Program Files/gcl*' ],
-\ [ 'cmucl.exe',   'cmu',       'w', 'c:/cmucl*,c:/Program Files/cmucl*' ],
-\ [ '*lisp*.exe',  'allegro',   'w', 'c:/acl*,c:/Program Files/acl*,c:/Program Files/*lisp*/bin/acl*' ],
-\ [ 'ecl.exe',     'ecl',       'w', 'c:/ecl*,c:/Program Files/ecl*' ],
-\ [ 'wx86cl.exe',  'clozure',   'w', 'c:/ccl*,c:/Program Files/ccl*,c:/Program Files/*lisp*/bin/ccl*' ],
-\ [ 'sbcl.exe',    'sbcl',      'w', 'c:/sbcl*,c:/Program Files/sbcl*,c:/Program Files/*lisp*/bin/sbcl*'] ]
+\ [ 'gcl.exe',      'clisp',     'w',   'c:/gcl*,c:/Program Files/gcl*' ],
+\ [ 'cmucl.exe',    'cmu',       'w',   'c:/cmucl*,c:/Program Files/cmucl*' ],
+\ [ '*lisp*.exe',   'allegro',   'w',   'c:/acl*,c:/Program Files/acl*,c:/Program Files/*lisp*/bin/acl*' ],
+\ [ 'ecl.exe',      'ecl',       'w',   'c:/ecl*,c:/Program Files/ecl*' ],
+\ [ 'wx86cl64.exe', 'clozure',   'w64', 'c:/ccl*,c:/Program Files/ccl*,c:/Program Files/*lisp*/bin/ccl*' ],
+\ [ 'wx86cl.exe',   'clozure',   'w',   'c:/ccl*,c:/Program Files/ccl*,c:/Program Files/*lisp*/bin/ccl*' ],
+\ [ 'sbcl.exe',     'sbcl',      'w',   'c:/sbcl*,c:/Program Files/sbcl*,c:/Program Files/*lisp*/bin/sbcl*'] ]
 
 " Try to autodetect Lisp executable
 " Returns list [Lisp executable, Lisp implementation]
-function! b:SlimvAutodetect( preferred )
+function! SlimvAutodetect( preferred )
     for lisp in s:lisp_desc
-        if     lisp[2] == 'w' && !g:slimv_windows
+        if     lisp[2] =~ 'w' && !g:slimv_windows
             " Valid only on Windows
+        elseif lisp[2] == 'w64' && $ProgramW6432 == ''
+            " Valid only on 64 bit Windows
         elseif lisp[2] == 'l' &&  g:slimv_windows
             " Valid only on Linux
         elseif a:preferred != '' && a:preferred != lisp[1]
@@ -86,7 +90,7 @@ function! b:SlimvAutodetect( preferred )
 endfunction
 
 " Try to find out the Lisp implementation
-function! b:SlimvImplementation()
+function! SlimvImplementation()
     if exists( 'g:slimv_impl' ) && g:slimv_impl != ''
         " Return Lisp implementation if defined
         return tolower( g:slimv_impl )
@@ -116,7 +120,7 @@ function! b:SlimvImplementation()
 endfunction
 
 " Try to autodetect SWANK and build the command to load the SWANK server
-function! b:SlimvSwankLoader()
+function! SlimvSwankLoader()
     " First check if SWANK is bundled with Slimv
     let swanks = split( globpath( &runtimepath, 'slime/start-swank.lisp'), '\n' )
     if len( swanks ) == 0
@@ -146,12 +150,12 @@ function! b:SlimvSwankLoader()
 endfunction
 
 " Filetype specific initialization for the REPL buffer
-function! b:SlimvInitRepl()
+function! SlimvInitRepl()
     set filetype=lisp
 endfunction
 
 " Lookup symbol in the list of Lisp Hyperspec symbol databases
-function! b:SlimvHyperspecLookup( word, exact, all )
+function! SlimvHyperspecLookup( word, exact, all )
     if !exists( 'g:slimv_clhs_loaded' )
         runtime ftplugin/**/slimv-clhs.vim
     endif
