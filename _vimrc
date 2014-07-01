@@ -114,7 +114,9 @@ syntax on
 set t_Co=256
 
 " obviously, the only real choice...the universally renowned void colorscheme
-colorscheme void
+"colorscheme void
+" psyche. let's do modified jellybean
+colorscheme jellymod
 
 " highlight matching brackets/braces/etc, only highlight for 1/10th of a
 " second after a mtch is made
