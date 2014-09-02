@@ -81,6 +81,7 @@ autocmd BufNewFile,BufRead *.asd set filetype=lisp
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 autocmd BufRead,BufNewFile *.md set ft=markdown
+autocmd BufRead,BufNewFile *.less set ft=css
 
 autocmd BufRead,BufNewFile *.dust,*.dustjs,*.tl set filetype=dustjs
 
@@ -268,6 +269,7 @@ let g:slimv_balloon = 0		" fucking hate the balloons and all they do is crash
 let g:slimv_repl_max_len = 200
 let g:slimv_force_repl_scroll = 1
 let g:slimv_updatetime = 500
+let g:slimv_timeout = 3000
 let g:paredit_mode = 0
 if has('win32')
 	let g:slimv_lisp = 'c:/lisp/ccl/wx86cl.exe'
