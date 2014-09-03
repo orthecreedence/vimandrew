@@ -82,6 +82,7 @@ autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 autocmd BufRead,BufNewFile *.md set ft=markdown
 autocmd BufRead,BufNewFile *.less set ft=css
+autocmd BufRead,BufNewFile *.hbs set ft=html
 
 autocmd BufRead,BufNewFile *.dust,*.dustjs,*.tl set filetype=dustjs
 
@@ -224,7 +225,7 @@ let g:ctrlp_working_path_mode=''
 let g:ctrlp_jump_to_buffer='x'
 let g:ctrlp_match_window_bottom=1
 let g:ctrlp_match_window_reversed=1
-set wildignore+=*\\tmp\\*.*.zip,*.exe,*\\.git\\*
+set wildignore+=*\\tmp\\*.*.zip,*.exe,*\\.git\\*,*\\node_modules\\*
 
 
 " F9 toggles NERDTree
