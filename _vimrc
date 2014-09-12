@@ -118,7 +118,10 @@ set t_Co=256
 " obviously, the only real choice...the universally renowned void colorscheme
 "colorscheme void
 " psyche. let's do modified jellybean
-colorscheme jellymod
+colorscheme void
+if has("gui")
+	colorscheme jellymod
+endif
 
 " highlight matching brackets/braces/etc, only highlight for 1/10th of a
 " second after a mtch is made

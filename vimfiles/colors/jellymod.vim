@@ -9,12 +9,12 @@
 "
 "         "A colorful, dark color scheme for Vim."
 "
-" File:         jellybeans.vim
+" File:         jellymod.vim
 " URL:          github.com/nanotech/jellybeans.vim
 " Scripts URL:  vim.org/scripts/script.php?script_id=2555
-" Maintainer:   NanoTech (nanotech.nanotechcorp.net)
+" Maintainer:   Andrew Lyon (https://github.com/orthecreedence)
 " Version:      1.6~git
-" Last Change:  January 15th, 2012
+" Last Change:  today
 " License:      MIT
 " Contributors: Daniel Herbert (pocketninja)
 "               Henry So, Jr. <henryso@panix.com>
@@ -55,7 +55,7 @@ if exists("syntax_on")
   syntax reset
 endif
 
-let colors_name = "jellybeans"
+let colors_name = "jellymod"
 
 if has("gui_running") || &t_Co == 88 || &t_Co == 256
   let s:low_color = 0
