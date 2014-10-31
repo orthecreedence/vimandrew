@@ -84,7 +84,10 @@ autocmd BufRead,BufNewFile *.md set ft=markdown
 autocmd BufRead,BufNewFile *.less set ft=css
 autocmd BufRead,BufNewFile *.hbs set ft=html
 
-autocmd BufRead,BufNewFile *.dust,*.dustjs,*.tl set filetype=dustjs
+autocmd FileType json setlocal expandtab
+autocmd FileType json setlocal tabstop=2
+autocmd FileType yaml setlocal expandtab
+autocmd FileType yaml setlocal tabstop=2
 
 " indenting based on filetype
 filetype indent on
@@ -228,6 +231,10 @@ let g:ctrlp_working_path_mode=''
 let g:ctrlp_jump_to_buffer='x'
 let g:ctrlp_match_window_bottom=1
 let g:ctrlp_match_window_reversed=1
+let g:ctrlp_custom_ignore = {
+	\ 'dir':  '\v[\/](tmp|node_modules|\.(git|hg|svn))$',
+	\ 'file': '\v\.(exe|so|dll|zip)$',
+	\ }
 set wildignore+=*\\tmp\\*.*.zip,*.exe,*\\.git\\*,*\\node_modules\\*
 
 
