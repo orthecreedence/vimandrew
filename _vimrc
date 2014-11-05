@@ -122,9 +122,7 @@ set t_Co=256
 "colorscheme void
 " psyche. let's do modified jellybean
 colorscheme void
-if has("gui")
-	colorscheme jellymod
-endif
+autocmd GUIEnter * colorscheme jellymod
 
 " highlight matching brackets/braces/etc, only highlight for 1/10th of a
 " second after a mtch is made
