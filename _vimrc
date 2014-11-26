@@ -82,7 +82,7 @@ autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 autocmd BufRead,BufNewFile *.md set ft=markdown
 autocmd BufRead,BufNewFile *.less set ft=less
-autocmd BufRead,BufNewFile *.hbs set ft=html
+autocmd BufRead,BufNewFile *.hbs set ft=mustache
 
 autocmd FileType json setlocal expandtab
 autocmd FileType json setlocal tabstop=2
