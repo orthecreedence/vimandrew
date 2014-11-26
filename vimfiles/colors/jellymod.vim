@@ -265,13 +265,13 @@ fun! s:X(group, fg, bg, attr, lcfg, lcbg)
     let l:fge = empty(a:lcfg)
     let l:bge = empty(a:lcbg)
 
-    if !l:fge && !l:bge
-      exec "hi ".a:group." ctermfg=".a:lcfg." ctermbg=".a:lcbg
-    elseif !l:fge && l:bge
-      exec "hi ".a:group." ctermfg=".a:lcfg." ctermbg=NONE"
-    elseif l:fge && !l:bge
-      exec "hi ".a:group." ctermfg=NONE ctermbg=".a:lcbg
-    endif
+    "if !l:fge && !l:bge
+    "  exec "hi ".a:group." ctermfg=".a:lcfg." ctermbg=".a:lcbg
+    "elseif !l:fge && l:bge
+    "  exec "hi ".a:group." ctermfg=".a:lcfg." ctermbg=NONE"
+    "elseif l:fge && !l:bge
+    "  exec "hi ".a:group." ctermfg=NONE ctermbg=".a:lcbg
+    "endif
   else
     let l:fge = empty(a:fg)
     let l:bge = empty(a:bg)
