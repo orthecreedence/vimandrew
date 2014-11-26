@@ -81,7 +81,7 @@ autocmd BufNewFile,BufRead *.asd set filetype=lisp
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 autocmd BufRead,BufNewFile *.md set ft=markdown
-autocmd BufRead,BufNewFile *.less set ft=css
+autocmd BufRead,BufNewFile *.less set ft=less
 autocmd BufRead,BufNewFile *.hbs set ft=html
 
 autocmd FileType json setlocal expandtab
@@ -193,8 +193,8 @@ nnoremap <Leader>n :set rnu!<CR>
 nmap <Leader>u :UndotreeToggle<CR>
 
 " make ctrl+pageup/down control our buffer selection
-map <C-PageUp> :bprevious <CR>
-map <C-PageDown> :bnext <CR>
+map <C-PageUp> :tabp <CR>
+map <C-PageDown> :tabn <CR>
 
 " Ctrl+backspace deletes previous word
 imap <C-BS> <C-W>
