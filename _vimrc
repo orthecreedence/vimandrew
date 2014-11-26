@@ -45,6 +45,15 @@ let mapleader = ","
 " backspace can delete prev chars
 set bs=2
 
+" init pathogen, includes all the modules under the vimfiles/bundle/
+" NOTE: this needs to run *before* the `filetype [indent|plugin] on` stuff
+call pathogen#runtime_append_all_bundles()
+
+" indenting based on filetype
+" NOTE: this needs to run *after* pathogen loads!
+filetype indent on
+filetype plugin on
+
 " Use CTRL-S for saving, also in Insert mode
 noremap <C-S>		:update<CR>
 vnoremap <C-S>		<C-C>:update<CR>
@@ -81,17 +90,11 @@ autocmd BufNewFile,BufRead *.asd set filetype=lisp
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 autocmd BufRead,BufNewFile *.md set ft=markdown
-autocmd BufRead,BufNewFile *.less set ft=less
-autocmd BufRead,BufNewFile *.hbs set ft=mustache
 
 autocmd FileType json setlocal expandtab
 autocmd FileType json setlocal tabstop=2
 autocmd FileType yaml setlocal expandtab
 autocmd FileType yaml setlocal tabstop=2
-
-" indenting based on filetype
-filetype indent on
-filetype plugin on
 
 " makes cursor go to beinning of tab in normal mode instead of end of tab
 "set list lcs=tab:\ \ 
@@ -169,9 +172,6 @@ set nu
 
 " makes focus follow mouse cursor
 "set mousefocus
-
-" init pathogen, includes all the modules under the vimfiles/bundle/
-call pathogen#runtime_append_all_bundles()
 
 " -----------------------------------------
 " --------- window split bullshit ---------
