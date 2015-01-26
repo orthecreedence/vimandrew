@@ -1,6 +1,6 @@
 " slimv.vim:    The Superior Lisp Interaction Mode for VIM
 " Version:      0.9.13
-" Last Change:  04 May 2014
+" Last Change:  01 Dec 2014
 " Maintainer:   Tamas Kovacs <kovisoft at gmail dot com>
 " License:      This file is placed in the public domain.
 "               No warranty, express or implied.
@@ -1313,7 +1313,11 @@ function! SlimvConnectSwank()
         echon "\rConnected to SWANK server on port " . g:swank_port . "."
         if exists( "g:swank_block_size" ) && SlimvGetFiletype() == 'lisp'
             " Override SWANK connection output buffer size
-            let cmd = "(progn (setf (slot-value (swank::connection.user-output swank::*emacs-connection*) 'swank-backend::buffer)"
+            if s:swank_version >= '2014-09-08'
+                let cmd = "(progn (setf (slot-value (swank::connection.user-output swank::*emacs-connection*) 'swank/gray::buffer)"
+            else
+                let cmd = "(progn (setf (slot-value (swank::connection.user-output swank::*emacs-connection*) 'swank-backend::buffer)"
+            endif
             let cmd = cmd . " (make-string " . g:swank_block_size . ")) nil)"
             call SlimvSend( [cmd], 0, 1 )
         endif
@@ -2518,10 +2522,13 @@ function! SlimvEvalRegion() range
     else
         " Register was passed, so eval register contents instead
         let reg = getreg( v:register )
-        let ending = s:CloseForm( reg )
-        if ending == 'ERROR'
-            call SlimvError( 'Too many or invalid closing parens in register "' . v:register )
-            return
+        let ending = ""
+        if SlimvGetFiletype() != 'r'
+            let ending = s:CloseForm( reg )
+            if ending == 'ERROR'
+                call SlimvError( 'Too many or invalid closing parens in register "' . v:register )
+                return
+            endif
         endif
         let lines = [reg . ending]
     endif
