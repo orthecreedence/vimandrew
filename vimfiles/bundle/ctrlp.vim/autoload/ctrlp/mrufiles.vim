@@ -15,6 +15,7 @@ fu! ctrlp#mrufiles#opts()
 		\ 'case_sensitive': ['s:cseno', 1],
 		\ 'relative': ['s:re', 0],
 		\ 'save_on_update': ['s:soup', 1],
+		\ 'exclude_nomod': ['s:exclnomod', 0],
 		\ }]
 	for [ke, va] in items(opts)
 		let [{va[0]}, {pref.ke}] = [pref.ke, exists(pref.ke) ? {pref.ke} : va[1]]
@@ -38,13 +39,14 @@ fu! s:chop(mrufs)
 	retu a:mrufs
 endf
 
-fu! s:reformat(mrufs)
+fu! s:reformat(mrufs, ...)
 	let cwd = getcwd()
 	let cwd .= cwd !~ '[\/]$' ? ctrlp#utils#lash() : ''
 	if {s:re}
 		let cwd = exists('+ssl') ? tr(cwd, '/', '\') : cwd
 		cal filter(a:mrufs, '!stridx(v:val, cwd)')
 	en
+	if a:0 && a:1 == 'raw' | retu a:mrufs | en
 	let idx = strlen(cwd)
 	if exists('+ssl') && &ssl
 		let cwd = tr(cwd, '\', '/')
@@ -54,6 +56,8 @@ fu! s:reformat(mrufs)
 endf
 
 fu! s:record(bufnr)
+	if s:exclnomod && &l:modifiable | retu | en
+  if s:exclnomod && !&l:modifiable | retu | en
 	if s:locked | retu | en
 	let bufnr = a:bufnr + 0
 	let bufname = bufname(bufnr)
@@ -65,10 +69,11 @@ fu! s:record(bufnr)
 endf
 
 fu! s:addtomrufs(fname)
-	let fn = fnamemodify(a:fname, ':p')
+	let fn = fnamemodify(a:fname, get(g:, 'ctrlp_tilde_homedir', 0) ? ':p:~' : ':p')
 	let fn = exists('+ssl') ? tr(fn, '/', '\') : fn
+	let abs_fn = fnamemodify(fn,':p')
 	if ( !empty({s:in}) && fn !~# {s:in} ) || ( !empty({s:ex}) && fn =~# {s:ex} )
-		\ || !empty(getbufvar('^'.fn.'$', '&bt')) || !filereadable(fn) | retu
+		\ || !empty(getbufvar('^' . abs_fn . '$', '&bt')) || !filereadable(abs_fn) | retu
 	en
 	let idx = index(s:mrufs, fn, 0, !{s:cseno})
 	if idx
@@ -117,11 +122,16 @@ fu! ctrlp#mrufiles#add(fn)
 endf
 
 fu! ctrlp#mrufiles#list(...)
-	retu a:0 ? a:1 == 'raw' ? s:mergelists() : 0 : s:reformat(s:mergelists())
+	retu a:0 ? a:1 == 'raw' ? s:reformat(s:mergelists(), a:1) : 0
+		\ : s:reformat(s:mergelists())
 endf
 
 fu! ctrlp#mrufiles#bufs()
 	retu s:mrbs
+endf
+
+fu! ctrlp#mrufiles#tgrel()
+	let {s:re} = !{s:re}
 endf
 
 fu! ctrlp#mrufiles#cachefile()
@@ -137,7 +147,7 @@ fu! ctrlp#mrufiles#init()
 	let s:locked = 0
 	aug CtrlPMRUF
 		au!
-		au BufAdd,BufEnter,BufLeave,BufWritePost * cal s:record(expand('<abuf>', 1))
+		au BufWinEnter,BufWinLeave,BufWritePost * cal s:record(expand('<abuf>', 1))
 		au QuickFixCmdPre  *vimgrep* let s:locked = 1
 		au QuickFixCmdPost *vimgrep* let s:locked = 0
 		au VimLeavePre * cal s:savetofile(s:mergelists())
