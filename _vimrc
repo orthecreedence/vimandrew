@@ -18,11 +18,6 @@ set fileformats=unix,dos
 " Makes vim not overwrite permissions in cygwin files.
 set backupcopy=yes
 
-" allow typing jj quickly to map to Esc 
-inoremap kj <Esc>
-"inoremap jk <Esc>
-inoremap <C-c> <Esc>
-map ; :
 "set timeoutlen=500
 
 " set up a comma leader
@@ -54,16 +49,6 @@ call pathogen#runtime_append_all_bundles()
 filetype indent on
 filetype plugin on
 
-" Use CTRL-S for saving, also in Insert mode
-noremap <C-S>		:update<CR>
-vnoremap <C-S>		<C-C>:update<CR>
-inoremap <C-S>		<C-O>:update<CR>
-
-" Shift-insert pastes from clipboard
-noremap <S-Insert>	"+P
-vnoremap <S-Insert>	"+P
-inoremap <S-Insert>	<C-O>"+P
-
 " turn off annoying bells when hitting escape too many times n shit
 set noerrorbells visualbell t_vb=
 if has('autocmd')
@@ -85,6 +70,8 @@ set tabstop=4
 " ...but 2 spaces for lisp
 autocmd FileType lisp setlocal expandtab
 autocmd FileType lisp setlocal tabstop=2
+autocmd FileType lisp setlocal shiftwidth=2
+autocmd FileType lisp setlocal softtabstop=2
 autocmd BufNewFile,BufRead *.asd set filetype=lisp
 
 autocmd FileType markdown setlocal expandtab
@@ -132,9 +119,6 @@ autocmd GUIEnter * colorscheme jellymod
 set showmatch
 set matchtime=1
 
-" <Leader>h will turn ON search highlighting. C-c will temporarily disable it
-" for a specific search.
-nmap <Leader>h :set hls!<CR>
 set nohlsearch
 
 " turn off wordwrap
@@ -174,6 +158,38 @@ set nu
 "set mousefocus
 
 " -----------------------------------------
+" --------- general key bindings ----------
+" -----------------------------------------
+" <Leader>h will turn ON search highlighting. C-c will temporarily disable it
+" for a specific search.
+nmap <Leader>h :set hls!<CR>
+" Use CTRL-S for saving, also in Insert mode
+noremap <C-S>		:update<CR>
+vnoremap <C-S>		<C-C>:update<CR>
+inoremap <C-S>		<C-O>:update<CR>
+" allow typing kj quickly to map to Esc 
+inoremap kj <Esc>
+inoremap <C-c> <Esc>
+map ; :
+" Shift-insert pastes from clipboard
+noremap <S-Insert>	"+P
+vnoremap <S-Insert>	"+P
+inoremap <S-Insert>	<C-O>"+P
+" ,y / ,p / ,P copies/pastes to system clipboard
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+" toggle between relative and absolute line numbering with <Leader>n
+nnoremap <Leader>n :set rnu!<CR>
+" save a keystroke when saving
+nmap <Leader>w :w<CR>
+" make <Leader>x close the current buffer (without closing the window)
+nmap <Leader>x <Plug>BufKillBw
+
+" -----------------------------------------
 " --------- window split bullshit ---------
 " -----------------------------------------
 set splitright
@@ -182,13 +198,6 @@ set splitbelow
 " -----------------------------------------
 " --------- some shell remappings ---------
 " -----------------------------------------
-" make <Leader>x close the current buffer (without closing the window)
-"nmap <Leader>x <Plug>Kwbd
-nmap <Leader>x <Plug>BufKillBw
-let g:BufKillActionWhenBufferDisplayedInAnotherWindow = 'kill'
-
-" toggle between relative and absolute line numbering with <Leader>n
-nnoremap <Leader>n :set rnu!<CR>
 
 nmap <Leader>u :UndotreeToggle<CR>
 
@@ -238,12 +247,20 @@ set wildignore+=*\\tmp\\*.*.zip,*.exe,*\\.git\\*,*\\node_modules\\*
 
 " F9 toggles NERDTree
 map <F9> :NERDTreeToggle <CR>
+
+if has("win32") || has("win16")
+	nmap <Leader>sh :ConqueTermSplit c:\cygwin\cygwin.bat<CR>
+else
+	nmap <Leader>sh :ConqueTermSplit bash<CR>
+endif
+
+" -----------------------------------------
+" ------------- Plugin config -------------
 " -----------------------------------------
 
+let g:BufKillActionWhenBufferDisplayedInAnotherWindow = 'kill'
 
-" -----------------------------------------
-" --------- MiniBufExplorer setup ---------
-" -----------------------------------------
+" ------------ MiniBufExplorer ------------
 " F8 toggles MiniBufExplorer
 "map <F8> :TMiniBufExplorer <CR>
 
@@ -258,7 +275,7 @@ let g:miniBufExplorerMoreThanOne=2
 
 " reload MinBufExpl on buffer changes
 "autocmd BufRead,BufNew,BufWritePost :call UMiniBufExplorer
-" -----------------------------------------
+" ------------ vim notes ------------------
 
 " init vimnotes
 "g:notes_directory = "~/.vimandrew/notes"
@@ -281,8 +298,8 @@ let g:slimv_updatetime = 500
 let g:slimv_timeout = 3000
 let g:paredit_mode = 0
 if has('win32')
-	let g:slimv_lisp = 'c:/lisp/ccl/wx86cl.exe'
-	"let g:slimv_lisp = 'c:/lisp/sbcl/sbcl.exe'
+	let g:slimv_lisp = 'd:/lisp/ccl/wx86cl.exe'
+	"let g:slimv_lisp = 'd:/lisp/sbcl/sbcl.exe'
 else
 	let g:slimv_lisp = '/usr/local/ccl/lx86cl64'
 endif
@@ -351,6 +368,7 @@ nmap <Leader>scroll :set guioptions+=Lr<CR>
 " Remove toolbar
 set guioptions-=T
 
+" ------------ Remote editing -------------
 " don't make a bunch of annoying windows and prompts pop up for each remote
 " edit
 let g:netrw_silent=1
@@ -360,6 +378,9 @@ if has("win32") || has("win16")
 	let g:netrw_scp_cmd = "c:\\tools\\putty\\pscp.exe"
 endif
 
+" -----------------------------------------
+" --------------- Utilities ---------------
+" -----------------------------------------
 " add a word processing function
 function! WordProcessorMode()
 	setlocal linebreak
