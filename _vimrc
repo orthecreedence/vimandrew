@@ -235,7 +235,7 @@ map <F4> :CtrlP<CR>
 map <Leader>b :CtrlPBuffer<CR>
 let g:ctrlp_max_height=15
 let g:ctrlp_working_path_mode=''
-let g:ctrlp_jump_to_buffer='x'
+let g:ctrlp_jump_to_buffer=0
 let g:ctrlp_match_window_bottom=1
 let g:ctrlp_match_window_reversed=1
 let g:ctrlp_custom_ignore = {
