@@ -240,10 +240,10 @@ let g:ctrlp_jump_to_buffer=0
 let g:ctrlp_match_window_bottom=1
 let g:ctrlp_match_window_reversed=1
 let g:ctrlp_custom_ignore = {
-	\ 'dir':  '\v[\/](tmp|node_modules|\.(git|hg|svn))$',
+	\ 'dir':  '\v[\/](tmp|node_modules|bower_components|\.(git|hg|svn))$',
 	\ 'file': '\v\.(exe|so|dll|zip)$',
 	\ }
-set wildignore+=*\\tmp\\*.*.zip,*.exe,*\\.git\\*,*\\node_modules\\*
+set wildignore+=*\\tmp\\*.*.zip,*.exe,*\\.git\\*,*\\node_modules\\*,*\\bower_components\\*
 
 
 " F9 toggles NERDTree
