@@ -80,8 +80,12 @@ autocmd BufRead,BufNewFile *.md set ft=markdown
 
 autocmd FileType json setlocal expandtab
 autocmd FileType json setlocal tabstop=2
+autocmd FileType yml setlocal expandtab
+autocmd FileType yml setlocal tabstop=2
 autocmd FileType yaml setlocal expandtab
 autocmd FileType yaml setlocal tabstop=2
+autocmd FileType ansible setlocal expandtab
+autocmd FileType ansible setlocal tabstop=2
 
 " makes cursor go to beinning of tab in normal mode instead of end of tab
 "set list lcs=tab:\ \ 
