@@ -1,6 +1,6 @@
 " slimv.vim:    The Superior Lisp Interaction Mode for VIM
 " Version:      0.9.13
-" Last Change:  01 Dec 2014
+" Last Change:  11 Jun 2016
 " Maintainer:   Tamas Kovacs <kovisoft at gmail dot com>
 " License:      This file is placed in the public domain.
 "               No warranty, express or implied.
@@ -297,6 +297,7 @@ let s:save_showmode = &showmode                           " The original value f
 let s:python_initialized = 0                              " Is the embedded Python initialized?
 let s:swank_connected = 0                                 " Is the SWANK server connected?
 let s:swank_package = ''                                  " Package to use at the next SWANK eval
+let s:swank_package_form = ''                             " The entire form that was used to set current package
 let s:swank_form = ''                                     " Form to send to SWANK
 let s:refresh_disabled = 0                                " Set this variable temporarily to avoid recursive REPL rehresh calls
 let s:sldb_level = -1                                     " Are we in the SWANK debugger? -1 == no, else SLDB level
@@ -818,6 +819,7 @@ function! SlimvOpenReplBuffer()
     " Add keybindings valid only for the REPL buffer
     inoremap <buffer> <silent>        <C-CR> <End><C-O>:call SlimvSendCommand(1)<CR><End>
     inoremap <buffer> <silent>        <C-C>  <C-O>:call SlimvInterrupt()<CR>
+    inoremap <buffer> <silent> <expr> <C-W>  SlimvHandleCW()
 
     if g:slimv_repl_simple_eval
         inoremap <buffer> <silent>        <CR>     <C-R>=pumvisible() ? "\<lt>C-Y>"  : "\<lt>End>\<lt>C-O>:call SlimvSendCommand(0)\<lt>CR>\<lt>End>"<CR>
@@ -997,7 +999,7 @@ function SlimvQuitInspect( force )
         unlet b:inspect_pos
     endif
     setlocal modifiable
-    silent! %d
+    silent! %d _
     call SlimvEndUpdate()
     if a:force
         call SlimvCommand( 'python swank_quit_inspector()' )
@@ -1009,7 +1011,7 @@ endfunction
 function SlimvQuitThreads()
     " Clear the contents of the Threads buffer
     setlocal modifiable
-    silent! %d
+    silent! %d _
     call SlimvEndUpdate()
     call SlimvRestoreFocus(1)
 endfunction
@@ -1018,7 +1020,7 @@ endfunction
 function SlimvQuitSldb()
     " Clear the contents of the Sldb buffer
     setlocal modifiable
-    silent! %d
+    silent! %d _
     call SlimvEndUpdate()
     call SlimvRestoreFocus(1)
 endfunction
@@ -1219,14 +1221,18 @@ function! SlimvFindPackage()
     if found
         " Find the package name with all folds open
         normal! zn
-        silent normal! ww
+        silent normal! w
+        let l:package_command = expand('<cword>')
+        silent normal! w
         let l:packagename_tokens = split(expand('<cWORD>'),')\|\s')
         normal! zN
         if l:packagename_tokens != []
             " Remove quote character from package name
             let s:swank_package = substitute( l:packagename_tokens[0], "'", '', '' )
+            let s:swank_package_form = "(" . l:package_command . " " . l:packagename_tokens[0] . ")\n"
         else
             let s:swank_package = ''
+            let s:swank_package_form = ''
         endif
     endif
     let &ignorecase = save_ic
@@ -1239,6 +1245,7 @@ function! SlimvCommandUsePackage( cmd )
     let s:refresh_disabled = 1
     call SlimvCommand( a:cmd )
     let s:swank_package = ''
+    let s:swank_package_form = ''
     let s:refresh_disabled = 0
     call SlimvRefreshReplBuffer()
 endfunction
@@ -1369,6 +1376,7 @@ function! SlimvSend( args, echoing, output )
     endif
     call SlimvCommand( 'python swank_input("s:swank_form")' )
     let s:swank_package = ''
+    let s:swank_package_form = ''
     let s:refresh_disabled = 0
     call SlimvRefreshModeOn()
     call SlimvRefreshReplBuffer()
@@ -1574,7 +1582,8 @@ function SlimvLispindent( lnum )
 endfunction
 
 " Return Lisp source code indentation at the given line
-function! SlimvIndent( lnum )
+" Does not keep the cursor position
+function! SlimvIndentUnsafe( lnum )
     if &autoindent == 0 || a:lnum <= 1
         " Start of the file
         return 0
@@ -1802,6 +1811,14 @@ function! SlimvIndent( lnum )
     return li
 endfunction 
 
+" Indentation routine, keeps original cursor position
+function! SlimvIndent( lnum )
+    let oldpos = getpos( '.' )
+    let indent = SlimvIndentUnsafe( a:lnum )
+    call cursor( oldpos[1], oldpos[2] )
+    return indent
+endfunction
+
 " Convert indent value to spaces or a mix of tabs and spaces
 " depending on the value of 'expandtab'
 function! s:MakeIndent( indent )
@@ -1967,6 +1984,25 @@ function! SlimvHandleBS()
     else
         return "\<BS>"
     endif
+endfunction
+
+" Handle insert mode Ctrl-W keypress in the REPL buffer
+function! SlimvHandleCW()
+    if line( "." ) == s:GetPromptLine()
+        let trim_prompt = substitute( b:repl_prompt, '\s\+$', '', 'g' )
+        let promptlen = len( trim_prompt )
+        if col( "." ) > promptlen
+            let after_prompt = strpart( getline("."), promptlen-1, col(".")-promptlen )
+        else
+            let after_prompt = ''
+        endif
+        let word = matchstr( after_prompt, '^.*\s\S' )
+        if len( word ) == 0
+            " No word found after prompt, C-W not allowed
+            return ""
+        endif
+    endif
+    return "\<C-W>"
 endfunction
 
 " Recall previous command from command history
@@ -2447,7 +2483,6 @@ function! SlimvArglist( ... )
                 " Print argument list in status line with newlines removed.
                 " Disable showmode until the next ESC to prevent
                 " immeditate overwriting by the "-- INSERT --" text.
-                let s:save_showmode = &showmode
                 set noshowmode
                 let msg = substitute( msg, "\n", "", "g" )
                 redraw
@@ -2517,7 +2552,7 @@ endfunction
 
 " Eval buffer lines in the given range
 function! SlimvEvalRegion() range
-    if v:register == '"'
+    if v:register == '"' || v:register == '+'
         let lines = SlimvGetRegion(a:firstline, a:lastline)
     else
         " Register was passed, so eval register contents instead
@@ -2547,9 +2582,9 @@ endfunction
 " If the test form contains '%1' then it 'wraps' the selection around the '%1'
 function! SlimvEvalSelection( outreg, testform )
     let sel = SlimvGetSelection()
-    if a:outreg != '"'
+    if a:outreg != '"' && a:outreg != '+'
         " Register was passed, so store current selection in register
-        call setreg( a:outreg, sel )
+        call setreg( a:outreg, s:swank_package_form . sel)
     endif
     let lines = [sel]
     if a:testform != ''
@@ -2966,6 +3001,7 @@ function! SlimvCompileDefun()
         let s:swank_form = SlimvGetSelection()
         call SlimvCommandUsePackage( 'python swank_compile_string("s:swank_form")' )
     endif
+    call winrestview( oldpos )
 endfunction
 
 " Compile and load whole file
@@ -2990,6 +3026,7 @@ function! SlimvCompileLoadFile()
             call SlimvSwankResponse()
         endwhile
         if s:compiled_file != ''
+            let s:compiled_file = substitute( s:compiled_file, '\\', '/', 'g' )
             call SlimvCommandUsePackage( 'python swank_load_file("' . s:compiled_file . '")' )
             let s:compiled_file = ''
         endif
@@ -3017,7 +3054,7 @@ endfunction
 
 " Compile buffer lines in the given range
 function! SlimvCompileRegion() range
-    if v:register == '"'
+    if v:register == '"' || v:register == '+'
         let lines = SlimvGetRegion(a:firstline, a:lastline)
     else
         " Register was passed, so compile register contents instead
@@ -3172,7 +3209,7 @@ function! SlimvLookup( word )
     endwhile
     if symbol != [] && len(symbol) > 1
         " Symbol found, open HS page in browser
-        if match( symbol[1], ':' ) < 0 && exists( g:slimv_hs_root )
+        if match( symbol[1], ':' ) < 0 && exists( 'g:slimv_hs_root' )
             let page = g:slimv_hs_root . symbol[1]
         else
             " URL is already a fully qualified address
@@ -3316,6 +3353,30 @@ function! SlimvSetPackage()
     endif
 endfunction
 
+" Close lisp process running the swank server
+" and quit REPL buffer
+function! SlimvQuitRepl()
+    if s:swank_connected
+        call SlimvCommand( 'python swank_quit_lisp()' )
+        let s:swank_connected = 0
+        let buf = bufnr( '^' . g:slimv_repl_name . '$' )
+        if buf != -1
+            if g:slimv_repl_split
+                " REPL buffer exists, check if it is open in a window
+                let win = bufwinnr( buf )
+                if win != -1
+                    " Switch to the REPL window and close it
+                    if winnr() != win
+                        execute win . "wincmd w"
+                    endif
+                    execute "wincmd c"
+                endif
+            endif
+            execute "bd " . buf
+        endif
+    endif
+endfunction
+
 " =====================================================================
 "  Slimv keybindings
 " =====================================================================
@@ -3331,6 +3392,9 @@ function! s:MenuMap( name, shortcut1, shortcut2, command )
     elseif g:slimv_keybindings == 2
         " Easy to remember (two-key) keybinding set
         let shortcut = a:shortcut2
+    else
+        " No bindings
+        let shortcut = ''
     endif
 
     if shortcut != ''
@@ -3349,16 +3413,23 @@ function! SlimvInitBuffer()
     if SlimvGetFiletype() == 'r'
         inoremap <silent> <buffer> (          (<C-R>=SlimvArglist()<CR>
     else
-        inoremap <silent> <buffer> <Space>    <Space><C-R>=SlimvArglist()<CR>
-        inoremap <silent> <buffer> <CR>       <C-R>=pumvisible() ?  "\<lt>C-Y>" : SlimvHandleEnter()<CR><C-R>=SlimvArglistOnEnter()<CR>
+        if !exists("g:slimv_unmap_space") || g:slimv_unmap_space == 0
+            inoremap <silent> <buffer> <Space>    <Space><C-R>=SlimvArglist()<CR>
+        endif
+        if !exists("g:slimv_unmap_cr") || g:slimv_unmap_cr == 0
+            inoremap <silent> <buffer> <CR>       <C-R>=pumvisible() ?  "\<lt>C-Y>" : SlimvHandleEnter()<CR><C-R>=SlimvArglistOnEnter()<CR>
+        endif
     endif
     "noremap  <silent> <buffer> <C-C>      :call SlimvInterrupt()<CR>
     augroup SlimvInsertLeave
         au!
+        au InsertEnter * :let s:save_showmode=&showmode
         au InsertLeave * :let &showmode=s:save_showmode
     augroup END
     inoremap <silent> <buffer> <C-X>0     <C-O>:call SlimvCloseForm()<CR>
-    inoremap <silent> <buffer> <Tab>      <C-R>=SlimvHandleTab()<CR>
+    if !exists("g:slimv_unmap_tab") || g:slimv_unmap_tab == 0
+        inoremap <silent> <buffer> <Tab>      <C-R>=SlimvHandleTab()<CR>
+    endif
     inoremap <silent> <buffer> <S-Tab>    <C-R>=pumvisible() ? "\<lt>C-P>" : "\<lt>S-Tab>"<CR>
 
     " Setup balloonexp to display symbol description
@@ -3462,6 +3533,7 @@ call s:MenuMap( 'Slim&v.&Repl.&Connect-Server',                 g:slimv_leader.'
 call s:MenuMap( '',                                             g:slimv_leader.'g',  g:slimv_leader.'rp',  ':call SlimvSetPackage()<CR>' )
 call s:MenuMap( 'Slim&v.&Repl.Interrup&t-Lisp-Process',         g:slimv_leader.'y',  g:slimv_leader.'ri',  ':call SlimvInterrupt()<CR>' )
 call s:MenuMap( 'Slim&v.&Repl.Clear-&REPL',                     g:slimv_leader.'-',  g:slimv_leader.'-',   ':call SlimvClearReplBuffer()<CR>' )
+call s:MenuMap( 'Slim&v.&Repl.&Quit-REPL',                      g:slimv_leader.'Q',  g:slimv_leader.'rq',  ':call SlimvQuitRepl()<CR>' )
 
 
 " =====================================================================

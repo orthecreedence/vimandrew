@@ -132,6 +132,20 @@ For Clojure use the g:slimv_swank_clojure option, e.g.:
     let g:slimv_swank_clojure = '! xterm -e lein swank &' 
 
 
+- For pure text-based console without XTerm
+
+If you only have `SSH` and can not use `XTerm`, you can use `tmux` or `screen` instead.
+
+Linux example with `tmux`:
+    let g:slimv_swank_cmd = '! tmux new-window -d -n REPL-SBCL "sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp"'
+
+Linux example with `screen`:
+    let g:slimv_swank_cmd = '! screen -d -m -t REPL-SBCL sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp'
+
+Mac OS X example with `tmux`:
+    let g:slimv_swank_cmd = '!osascript -e "! tmux new-window -d -n REPL-SBCL "sbcl --load ~/.vim/bundle/slimv/slime/start-swank.lisp"'
+
+
 See the included documentation for more complete installation and customization instructions.
 
 

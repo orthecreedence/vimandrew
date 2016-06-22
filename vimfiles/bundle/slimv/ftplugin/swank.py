@@ -5,7 +5,7 @@
 # SWANK client for Slimv
 # swank.py:     SWANK client code for slimv.vim plugin
 # Version:      0.9.13
-# Last Change:  11 Oct 2014
+# Last Change:  11 Feb 2016
 # Maintainer:   Tamas Kovacs <kovisoft at gmail dot com>
 # License:      This file is placed in the public domain.
 #               No warranty, express or implied.
@@ -690,6 +690,8 @@ def swank_listen():
 
                 elif message == ':write-string':
                     # REPL has new output to display
+                    if len(r) > 2 and r[2] == ':repl-result':
+                        retval = retval + new_line(retval)
                     retval = retval + unquote(r[1])
                     add_prompt = True
                     for k,a in actions.items():
@@ -762,7 +764,7 @@ def swank_listen():
                                     retval = retval + unquote(params)
                                     if action:
                                         action.result = retval
-                                vim.command("let s:swank_ok_result='%s'" % retval.replace("'", "''"))
+                                vim.command("let s:swank_ok_result='%s'" % retval.replace("'", "''").replace("\0", "^@"))
                                 if element == 'nil' or (action and action.name in to_prompt):
                                     # No more output from REPL, write new prompt
                                     retval = retval + new_line(retval) + get_prompt()
@@ -950,8 +952,12 @@ def swank_eval(exp):
     swank_rex(':listener-eval', cmd, get_swank_package(), ':repl-thread')
 
 def swank_eval_in_frame(exp, n):
-    cmd = '(swank:eval-string-in-frame ' + requote(exp) + ' ' + str(n) + ')'
-    swank_rex(':eval-string-in-frame', cmd, get_swank_package(), current_thread, str(n))
+    pkg = get_swank_package()
+    if swank_version >= '2011-11-21':
+        cmd = '(swank:eval-string-in-frame ' + requote(exp) + ' ' + str(n) + ' ' + pkg + ')'
+    else:
+        cmd = '(swank:eval-string-in-frame ' + requote(exp) + ' ' + str(n) + ')'
+    swank_rex(':eval-string-in-frame', cmd, pkg, current_thread, str(n))
 
 def swank_pprint_eval(exp):
     cmd = '(swank:pprint-eval ' + requote(exp) + ')'
@@ -1160,6 +1166,10 @@ def swank_kill_thread(index):
 def swank_debug_thread(index):
     cmd = '(swank:debug-nth-thread ' + str(index) + ')'
     swank_rex(':debug-thread', cmd, get_swank_package(), 't', str(index))
+
+def swank_quit_lisp():
+    swank_rex(':quit-lisp', '(swank:quit-lisp)', 'nil', 't')
+    swank_disconnect()
 
 ###############################################################################
 # Generic SWANK connection handling
