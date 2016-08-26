@@ -303,8 +303,8 @@ let g:slimv_updatetime = 500
 let g:slimv_timeout = 3000
 let g:paredit_mode = 0
 if has('win32')
-	"let g:slimv_lisp = 'd:/lisp/ccl/wx86cl.exe'
-	let g:slimv_lisp = 'd:/lisp/sbcl/sbcl.exe'
+	let g:slimv_lisp = 'd:/lisp/ccl/wx86cl.exe'
+	"let g:slimv_lisp = 'd:/lisp/sbcl/sbcl.exe'
 else
 	let g:slimv_lisp = '/usr/local/ccl/lx86cl64'
 endif
