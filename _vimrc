@@ -68,22 +68,24 @@ set shiftwidth=4	" how much indent to do when autoindenting
 " use 4-space tabs (still tabs tho, not spaces)
 set tabstop=4
 " ...but 2 spaces for lisp
+autocmd BufNewFile,BufRead *.asd set filetype=lisp
 autocmd FileType lisp setlocal expandtab
 autocmd FileType lisp setlocal tabstop=2
 autocmd FileType lisp setlocal shiftwidth=2
 autocmd FileType lisp setlocal softtabstop=2
-autocmd BufNewFile,BufRead *.asd set filetype=lisp
 
+autocmd BufRead,BufNewFile *.md set ft=markdown
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
-autocmd BufRead,BufNewFile *.md set ft=markdown
 
 autocmd FileType json setlocal expandtab
 autocmd FileType json setlocal tabstop=2
 autocmd FileType yml setlocal expandtab
 autocmd FileType yml setlocal tabstop=2
+autocmd FileType yml setlocal shiftwidth=2
 autocmd FileType yaml setlocal expandtab
 autocmd FileType yaml setlocal tabstop=2
+autocmd FileType yaml setlocal shiftwidth=2
 autocmd FileType ansible setlocal expandtab
 autocmd FileType ansible setlocal tabstop=2
 
