@@ -74,6 +74,13 @@ autocmd FileType lisp setlocal tabstop=2
 autocmd FileType lisp setlocal shiftwidth=2
 autocmd FileType lisp setlocal softtabstop=2
 
+autocmd FileType hcl setlocal expandtab
+autocmd FileType hcl setlocal tabstop=2
+autocmd FileType hcl setlocal shiftwidth=2
+autocmd FileType hcl setlocal softtabstop=2
+autocmd BufNewFile,BufRead *.nomad set filetype=hcl
+autocmd BufNewFile,BufRead *.hcl set filetype=hcl
+
 autocmd BufRead,BufNewFile *.md set ft=markdown
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
@@ -305,11 +312,18 @@ let g:slimv_updatetime = 500
 let g:slimv_timeout = 3000
 let g:paredit_mode = 0
 if has('win32')
-	let g:slimv_lisp = 'd:/lisp/ccl/wx86cl.exe'
+	let g:slimv_lisp = 'c:/dev/ccl/wx86cl.exe'
 	"let g:slimv_lisp = 'd:/lisp/sbcl/sbcl.exe'
 else
 	let g:slimv_lisp = '/usr/local/ccl/lx86cl64'
 endif
+
+" ------------ Lisp/vlime shit ------------
+"function! VlimeBuildServerCommandFor_mylisp(vlime_loader, vlime_eval)
+	"return ['cl', a:vlime_loader, '-e' a:vlime_eval]
+"endfunction
+"let g:vlime_cl_impl = 'mylisp'
+
 
 " ------------ PHP shit -------------
 " syntax crap
