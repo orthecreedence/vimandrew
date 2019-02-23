@@ -96,6 +96,11 @@ autocmd FileType yaml setlocal shiftwidth=2
 autocmd FileType ansible setlocal expandtab
 autocmd FileType ansible setlocal tabstop=2
 
+augroup pencil
+	autocmd!
+	autocmd FileType markdown,mkd call pencil#init({'wrap': 'soft'})
+augroup END
+
 " makes cursor go to beinning of tab in normal mode instead of end of tab
 "set list lcs=tab:\ \ 
 
@@ -398,28 +403,4 @@ if has("win32") || has("win16")
 	let g:netrw_cygwin = 0
 	let g:netrw_scp_cmd = "c:\\tools\\putty\\pscp.exe"
 endif
-
-" -----------------------------------------
-" --------------- Utilities ---------------
-" -----------------------------------------
-" add a word processing function
-function! WordProcessorMode()
-	setlocal linebreak
-	setlocal spell spelllang=en_us
-	"setlocal autoindent
-	"setlocal smartindent
-
-	" auto-wrap method
-	setlocal wrap
-	setlocal nonu
-	setlocal fo=n
-	map j gj
-	map k gk
-
-	" forced-width method
-	"setlocal textwidth=80
-	"setlocal linebreak
-	"setlocal fo=atn
-endfunction
-com! WordP call WordProcessorMode()
 
