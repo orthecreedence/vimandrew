@@ -1,6 +1,9 @@
 " no backward compatibility w/ vi
 set nocompatible
 
+" fuck all other encoding
+set encoding=utf-8
+
 " make viminfo forget the last files edited
 set viminfo='0,/0,:0,<0,@0,f0
 
@@ -99,6 +102,7 @@ autocmd FileType ansible setlocal tabstop=2
 augroup pencil
 	autocmd!
 	autocmd FileType markdown,mkd call pencil#init({'wrap': 'soft'})
+	let g:pencil#conceallevel = 0
 augroup END
 
 " makes cursor go to beinning of tab in normal mode instead of end of tab
