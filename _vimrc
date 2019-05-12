@@ -21,6 +21,8 @@ set fileformats=unix,dos
 " Makes vim not overwrite permissions in cygwin files.
 set backupcopy=yes
 
+set noundofile
+
 "set timeoutlen=500
 
 " set up a comma leader
