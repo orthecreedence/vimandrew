@@ -79,6 +79,12 @@ autocmd FileType lisp setlocal tabstop=2
 autocmd FileType lisp setlocal shiftwidth=2
 autocmd FileType lisp setlocal softtabstop=2
 
+"autocmd FileType javascript.jsx setlocal expandtab
+"autocmd FileType javascript.jsx setlocal tabstop=2
+"autocmd FileType javascript.jsx setlocal shiftwidth=2
+"autocmd FileType javascript.jsx setlocal softtabstop=2
+"let g:jsx_ext_required = 1
+
 autocmd FileType hcl setlocal expandtab
 autocmd FileType hcl setlocal tabstop=2
 autocmd FileType hcl setlocal shiftwidth=2
