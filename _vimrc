@@ -54,12 +54,6 @@ call pathogen#runtime_append_all_bundles()
 filetype indent on
 filetype plugin on
 
-" turn off annoying bells when hitting escape too many times n shit
-set noerrorbells visualbell t_vb=
-if has('autocmd')
-  autocmd GUIEnter * set visualbell t_vb=
-endif
-
 " always show status line
 "set laststatus=2
 
@@ -142,7 +136,6 @@ set t_Co=256
 "colorscheme void
 " psyche. let's do modified jellybean
 colorscheme void
-autocmd GUIEnter * colorscheme jellymod
 
 " highlight matching brackets/braces/etc, only highlight for 1/10th of a
 " second after a mtch is made
@@ -375,36 +368,11 @@ set foldnestmax=1
 let html_use_css = 1
 let use_xhtml = 1
 
-" set up font shit for gui
-if has("win32")
-	set guifont=courier_new_cyr:h10
-	autocmd GUIEnter * simalt ~X
-else
-	set guifont=Deja\ Vu\ Sans\ Mono\ 10
-	if has("gui")
-		set toolbar=icons,text " how to show the toolbar
-		set lsp=2
-	endif
-endif
-
-" Remove menu bar, graphical tabs (text tabs take up less spaceeeee)
-set guioptions-=m
-set guioptions-=e
-nmap <Leader>menu :set guioptions+=m<CR>
-
-" Remove scroll bars
-set guioptions+=LlRrb
-set guioptions-=LlRrb
-nmap <Leader>scroll :set guioptions+=Lr<CR>
-
 " save window position when switching buffers
 "if v:version >= 700
 "	au BufLeave * let b:winview = winsaveview()
 "	au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 "endif
-
-" Remove toolbar
-set guioptions-=T
 
 " ------------ Remote editing -------------
 " don't make a bunch of annoying windows and prompts pop up for each remote
@@ -414,5 +382,47 @@ let g:netrw_silent=1
 if has("win32") || has("win16")
 	let g:netrw_cygwin = 0
 	let g:netrw_scp_cmd = "c:\\tools\\putty\\pscp.exe"
+endif
+
+" set up GUI-specific config
+if has("gui_running")
+	" turn off annoying bells when hitting escape too many times n shit
+	set noerrorbells visualbell t_vb=
+	if has('autocmd')
+		autocmd GUIEnter * set visualbell t_vb=
+	endif
+
+	" set up a good GUI colorschema
+	autocmd GUIEnter * colorscheme jellymod
+
+	" remove horrible toolbar
+	" NOTE: putting this as its own command (without GUIEnter) hangs on
+	" startup =[
+	autocmd GUIEnter * set guioptions-=T
+
+	if has("win32")
+		set guifont=courier_new_cyr:h10
+		autocmd GUIEnter * simalt ~X
+	else
+		set guifont=Deja\ Vu\ Sans\ Mono\ 12
+		" how to show the toolbar
+		set toolbar=
+		set lsp=2
+
+		" Remove menu bar, graphical tabs (text tabs take up less spaceeeee)
+		set guioptions-=m
+		set guioptions-=e
+		nmap <Leader>menu :set guioptions+=m<CR>
+
+		" Remove scroll bars
+		set guioptions+=LlRrb
+		set guioptions-=LlRrb
+		nmap <Leader>scroll :set guioptions+=Lr<CR>
+
+		set lines=999 columns=999
+		set toolbar=
+	endif
+else
+	set mouse=
 endif
 
