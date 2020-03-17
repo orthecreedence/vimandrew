@@ -90,6 +90,8 @@ autocmd BufRead,BufNewFile *.md set ft=markdown
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 
+autocmd BufRead,BufNewFile *.toml set ft=toml
+
 autocmd BufRead,BufNewFile *.svelte set ft=svelte
 
 autocmd FileType json setlocal expandtab
