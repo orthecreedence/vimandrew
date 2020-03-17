@@ -90,6 +90,8 @@ autocmd BufRead,BufNewFile *.md set ft=markdown
 autocmd FileType markdown setlocal expandtab
 autocmd FileType liquid setlocal expandtab
 
+autocmd BufRead,BufNewFile *.svelte set ft=svelte
+
 autocmd FileType json setlocal expandtab
 autocmd FileType json setlocal tabstop=2
 autocmd FileType yml setlocal expandtab
@@ -404,7 +406,9 @@ if has("gui_running")
 		set guifont=courier_new_cyr:h10
 		autocmd GUIEnter * simalt ~X
 	else
-		set guifont=Deja\ Vu\ Sans\ Mono\ 12
+		"set guifont=Deja\ Vu\ Sans\ Mono\ 11
+		set guifont=Roboto\ Mono\ 11
+		"set guifont=Hack\ 11
 		" how to show the toolbar
 		set toolbar=
 		set lsp=2
