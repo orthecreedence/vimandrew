@@ -1,0 +1,14 @@
+; note: `mergeoptions = --no-edit` never works
+; instead, add this to bash startup:
+;
+;     export GIT_MERGE_AUTOEDIT=no
+;
+[core]
+	mergeoptions = --no-edit
+
+[merge]
+	edit = no
+
+[user]
+	email = andrew@killtheradio.net
+	name = Andrew Danger Lyon
