@@ -1,0 +1,27 @@
+!! -----------------------------------------------------------------------------
+!! view full list via:
+!!     rofi -dump-xresources
+!! -----------------------------------------------------------------------------
+
+!! general
+rofi.modi: window,windowcd,run
+
+!! appearance
+rofi.window-format: '{w} - {c} {t} {n}'
+rofi.theme: solarized-andrew
+!rofi.theme-str: '@import "$HOME/.config/rofi/solarized.andrew.rasi"'
+rofi.show-icons: true
+
+!! position
+rofi.location: 2
+rofi.width: 80
+rofi.lines: 8
+
+!! matching
+rofi.case-sensitive: false
+rofi.window-match-fields: title,class,role,name,desktop
+rofi.sort: true
+rofi.matching: fuzzy
+rofi.sorting-method: fzf
+rofi.tokenize: true
+
