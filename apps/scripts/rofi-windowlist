@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ "$1" == "" ]; then
+	winlist=$(wmctrl -l)
+	cur_desktop=$(wmctrl -d | grep -P '^[0-9]+ +\*' | awk '{print $1}')
+	while IFS= read -r line; do
+		id="$(echo "${line}" | awk '{print $1}')"
+		xprop="$(xprop -id ${id})"
+		desktop_id="$(echo "${line}" | awk '{print $2}')"
+		machine="$(echo "${line}" | awk '{print $3}')"
+		title="$(echo "${line}" | awk '{$1 = ""; $2 = ""; $3 = ""; print $0}' | sed 's/^ \+//')"
+		class="$(xprop -id ${id} WM_CLASS | sed 's/.*, //' | sed 's/"//g')"
+		wintype="$(xprop -id ${id} _NET_WM_WINDOW_TYPE | sed 's/.*= //')"
+		sticky="$(echo "${xprop}" | grep _NET_WM_STATE_STICKY)"
+
+		if
+			[ "${wintype}" == "_NET_WM_WINDOW_TYPE_DOCK" ] ||
+			[ "${wintype}" == "_NET_WM_WINDOW_TYPE_DESKTOP" ] ||
+			[ "${wintype}" == "_NET_WM_WINDOW_TYPE_DIALOG" ]; then
+			continue
+		fi
+
+		if 
+			[ "${desktop_id}" != "${cur_desktop}" ] &&
+			[ "${desktop_id}" != "-1" ] &&
+			[ "${sticky}" == "" ]; then
+			continue
+		fi
+
+		#echo "${class} ${title} ${id}" | sed 's/ /|/g'
+		echo "${class} ${title} ${id}" | sed 's/ / /g'
+		#echo "${class} - ${title} - ${id}"
+	done <<< "${winlist}"
+else
+	id=$(echo $1 | sed 's/.*|0x/0x/')
+	wmctrl -i -a ${id}
+fi
+
