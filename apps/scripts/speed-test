@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#TEST=http://speedtest.wdc01.softlayer.com/downloads/test500.zip
+#TEST=http://speedtest.fremont.linode.com/100MB-fremont.bin
+
+wget --output-document=/dev/null http://speedtest.fremont.linode.com/100MB-fremont.bin
+

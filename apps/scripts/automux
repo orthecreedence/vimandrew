@@ -1,0 +1,44 @@
+#!/bin/bash
+
+function command() {
+	CMD="$1"
+	xdotool type "$1"
+	xdotool key Return
+}
+
+function key() {
+	KEY="$1"
+	xdotool key $KEY
+}
+
+function clear() {
+	for n in {1..10}; do
+		key BackSpace
+	done
+}
+
+function name_panel() {
+	NAME="$1"
+	key ctrl+a
+	key comma
+	clear
+	command $NAME
+}
+
+name_panel 'cmd'
+
+key ctrl+a
+key c
+name_panel 'srv'
+
+key ctrl+a
+key c
+name_panel 'make'
+
+key ctrl+a
+key n
+
+echo "Now type ssh-add to log in..."
+ssh-agent bash
+
+

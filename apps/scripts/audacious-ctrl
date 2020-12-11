@@ -1,0 +1,29 @@
+#!/bin/bash
+
+CMD=$1
+
+function usage () {
+	echo "audacious-ctrl <play|stop>"
+	exit 1
+}
+
+if [ "${CMD}" == "" ]; then
+	usage
+fi
+
+sendkey=''
+
+case $CMD in
+	play)
+		sendkey='x'
+		;;
+	stop)
+		sendkey='v'
+		;;
+	*)
+		usage
+		;;
+esac
+
+xdotool search --onlyvisible --name 'Audacious$' key $sendkey
+

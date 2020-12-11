@@ -1,0 +1,17 @@
+#!/bin/bash
+
+POSITION="-location 1 -width 100 -lines 8"
+MATCHING="-matching fuzzy -sorting-method fzf"
+rofi \
+	-modi window,windowcd,run \
+	-show window \
+	-window-match-fields title,class,role,name,desktop \
+	-window-format '{w} - {c} {t} {n}' \
+	-sort \
+	-i \
+	-theme solarized \
+	-show-icons \
+	$MATCHING \
+	$POSITION
+
+	#-window-command 'wmctrl -i -R {window}' \

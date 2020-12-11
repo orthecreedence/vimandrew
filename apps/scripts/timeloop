@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo ""
+echo "Stuck in a time loop? Try:"
+echo "  sudo sleeptool off"
+echo ""
+
+echo "Let's debug the lid state:"
+while true; do
+	cat /proc/acpi/button/lid/LID0/state
+	sleep 1
+done
+
