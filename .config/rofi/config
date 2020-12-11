@@ -9,13 +9,12 @@ rofi.modi: window,windowcd,run
 !! appearance
 rofi.window-format: '{w} - {c} {t} {n}'
 rofi.theme: solarized-andrew
-!rofi.theme-str: '@import "$HOME/.config/rofi/solarized.andrew.rasi"'
 rofi.show-icons: true
 
 !! position
 rofi.location: 2
-rofi.width: 80
-rofi.lines: 8
+rofi.width: 100
+rofi.lines: 10
 
 !! matching
 rofi.case-sensitive: false
