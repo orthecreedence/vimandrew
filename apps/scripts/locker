@@ -2,9 +2,12 @@
 
 img=$1
 res=$2		# 1920x1080
-if [ "$(echo $img | grep -P '\.(png|jpg|jpeg)')" != "" ] && [ "$(echo $res | grep -P '[0-9]+x[0-9]+')" != "" ]; then
+if [ "$(echo $img | grep -P '\.(png|jpg|jpeg)')" != "" ] && ( [ "$(echo $res | grep -P '[0-9]+x[0-9]+')" != "" ] || [ "$res" == "auto" ] ); then
 	shift
 	shift
+	if [ "$res" == "auto" ]; then
+		res=$(xdpyinfo | grep dimens | awk '{print $2}')
+	fi
 	convert $img -gravity center -resize ${res}^ -crop ${res}+0+0 +repage -brightness-contrast -10x0 -blur 16x16 RGB:- \
 		| i3lock --raw ${res}:rgb --image /dev/stdin $@
 else
