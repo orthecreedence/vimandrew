@@ -1,0 +1,61 @@
+!! URxvt Appearance
+URxvt.font: xft:DejaVuSansMono:pixelsize=16
+URxvt.boldFont: xft:DejaVuSansMono:pixelsize=16
+URxvt.italicFont: xft:DejaVuSansMono:pixelsize=16
+URxvt.boldItalicfont: xft:DejaVuSansMono:pixelsize=16
+URxvt.letterSpace: 0
+URxvt.lineSpace: 0
+URxvt.geometry: 92x24
+URxvt.internalBorder: 24
+URxvt.cursorBlink: true
+URxvt.cursorUnderline: false
+URxvt.saveline: 2048
+URxvt.scrollBar: false
+URxvt.scrollBar_right: false
+URxvt.urgentOnBell: true
+URxvt.depth: 24
+URxvt.iso14755: false
+
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.keysym.Control-Right: \033[1;5C
+URxvt.keysym.Control-Left: \033[1;5D
+! Doesn't work:
+!URxvt.keysym.C-BackSpace: \033[33~
+
+! special
+URxvt.foreground:   #ababab
+URxvt.background:   #000000
+URxvt.cursorColor:  #ababab
+
+! black
+URxvt.color0:       #000000
+URxvt.color8:       #343434
+
+! red
+URxvt.color1:       #e92f2f
+URxvt.color9:       #e92f2f
+
+! green
+URxvt.color2:       #0ed839
+URxvt.color10:      #0ed839
+
+! yellow
+URxvt.color3:       #dddd13
+URxvt.color11:      #dddd13
+
+! blue
+URxvt.color4:       #5555FF
+URxvt.color12:      #5555FF
+
+! magenta
+URxvt.color5:       #f996e2
+URxvt.color13:      #f996e2
+
+! cyan
+URxvt.color6:       #23edda
+URxvt.color14:      #23edda
+
+! white
+URxvt.color7:       #ababab
+URxvt.color15:      #f9f9f9
