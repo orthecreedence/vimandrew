@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Also see apps/scripts/locker
+#   - has an in-place version of this generator for the lock screen
+#
+# convert pripyat.jpg -gravity center -resize 1920x1080^ -crop 1920x1080+0+0 +repage RGB:- | i3lock --raw 1920x1080:rgb --image /dev/stdin
+
+inp=$1
+out=$2
+res=$3
+mode=$4
+
+if [ "$inp" == "" ] || [ "$out" == "" ] || [ "$res" == "" ]; then
+	echo "Generates a background image of the (exact) given size with the option of"
+	echo "creating a lock image (lower brightness, blurred) via the --lock option."
+	echo
+	echo "Usage: $0 <inputimg> <outputimg> <resolution> [--lock]"
+	echo "  <inputimg>"
+	echo "    The image we're converting."
+	echo "  <outputimg>"
+	echo "    The filename of the image we're writing to."
+	echo "  <resolution>"
+	echo "    The exact resulting resolution we want our image to be (effectively"
+	echo "    does a css background-size: cover)."
+	echo "  --lock"
+	echo "   If this is set, the output image has a blur applied and reduced"
+	echo "   brightness, great for a lock image."
+	exit 1
+fi
+
+extraopts=""
+if [ "$mode" == "--lock" ]; then
+	extraopts="-brightness-contrast -10x0 -blur 16x16 "
+fi
+
+convert $inp -gravity center -resize 1920x1080^ -crop ${res}+0+0 +repage $extraopts $out
+
