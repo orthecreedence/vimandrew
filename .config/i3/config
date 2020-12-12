@@ -29,10 +29,8 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
-exec --no-startup-id feh --bg-scale ~/pripyat.jpg
-
-exec_always --no-startup-id dunst -conf ~/.dunstrc
-exec_always --no-startup-id ~/.config/polybar/launch.sh
+exec_always --no-startup-id feh --bg-fill ~/pripyat.jpg
+exec_always --no-startup-id dunst
 exec_always --no-startup-id lxpolkit
 
 # Use pactl to adjust volume in PulseAudio.
@@ -129,6 +127,10 @@ bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 
+bindcode $mod+112 workspace prev
+bindcode $mod+117 workspace next
+bindcode Mod1+23 workspace back_and_forth
+
 # move focused container to workspace
 bindsym $mod+Control+1 move container to workspace number $ws1
 bindsym $mod+Control+2 move container to workspace number $ws2
@@ -148,17 +150,28 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-# grave
-bindcode $mod+49 exec "~/apps/bin/do-rofi drun"
-# tab
-bindcode $mod+23 exec "~/apps/bin/do-rofi"
+# custom bindings
 
-bindsym $mod+w exec "~/apps/bin/do-rofi"
-bindsym $mod+Shift+1 exec "firefox"
-bindsym $mod+Shift+2 exec "gvim"
+# read 1 character and mark the current window with this character
+bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
+# read 1 character and go to the window with the character
+bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
+
+# grave
+bindcode $mod+49 exec "rofi -show drun"
+# tab
+bindcode $mod+23 exec "rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu"
+#bindcode $mod+23 exec "rofi -show window"
+bindsym $mod+Shift+1 exec firefox
+bindsym $mod+Shift+2 exec gvim
 #bindsym $mod+Shift+3 exec i3-sensible-terminal
 bindsym $mod+Shift+3 exec xfce4-terminal
 bindsym $mod+Shift+4 exec thunar
+bindsym $mod+Shift+5 exec google-chrome
+bindcode $mod+60 exec dunstctl close
+bindcode $mod+Shift+60 exec dunstctl close-all
+bindcode $mod+59 exec dunstctl history-pop
+bindcode $mod+61 exec dunstctl context
 
 for_window [window_role="About"] floating enable
 for_window [class="firefox"] border pixel 0
@@ -166,7 +179,7 @@ for_window [class="urxvt"] border pixel 0
 for_window [class="dunst"] floating enable
 for_window [class="thunar"] floating enable
 
-#hide_edge_borders smart
+hide_edge_borders smart
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -197,14 +210,14 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-#bar {
-#	i3bar_command i3bar --transparency
-#        status_command i3status
-#	output primary
-#	tray_padding 3
-#	font pango:DejaVu Sans Mono 12
-#	workspace_min_width 40
-#	colors {
-#		background #00000055
-#	}
-#}
+bar {
+	i3bar_command i3bar --transparency
+	status_command i3status-rs
+	output primary
+	tray_padding 3
+	font pango:DejaVu Sans Mono 12
+	workspace_min_width 40
+	colors {
+		background #00000055
+	}
+}

@@ -7,7 +7,7 @@
 rofi.modi: window,windowcd,run
 
 !! appearance
-rofi.window-format: '{w} - {c} {t} {n}'
+rofi.window-format: {w} - {c} {t} {n}
 rofi.theme: solarized-andrew
 rofi.show-icons: true
 

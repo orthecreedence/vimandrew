@@ -1,5 +1,5 @@
 favorites=exo-terminal-emulator.desktop,exo-file-manager.desktop,exo-web-browser.desktop,exo-mail-reader.desktop
-recent=pamac-updater.desktop,xfce-ui-settings.desktop,dbx_preference.desktop,thunar.desktop,xfce4-settings-editor.desktop,xfce-keyboard-settings.desktop,xfce-wmtweaks-settings.desktop,xfce-workspaces-settings.desktop,xfce-wm-settings.desktop,gvim.desktop
+recent=xfce-keyboard-settings.desktop,pamac-updater.desktop,xfce-ui-settings.desktop,dbx_preference.desktop,thunar.desktop,xfce4-settings-editor.desktop,xfce-wmtweaks-settings.desktop,xfce-workspaces-settings.desktop,xfce-wm-settings.desktop,gvim.desktop
 button-icon=/usr/share/icons/whiskermenu-manjaro.svg
 button-single-row=false
 show-button-title=false

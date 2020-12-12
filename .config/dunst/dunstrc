@@ -156,7 +156,7 @@
     # Show age of message if message is older than show_age_threshold
     # seconds.
     # Set to -1 to disable.
-    show_age_threshold = 60
+    show_age_threshold = -1
 
     # Split notifications into multiple lines if they don't fit into
     # geometry.
@@ -240,7 +240,7 @@
     # corners.
     # The radius will be automatically lowered if it exceeds half of the
     # notification height to avoid clipping text and/or icons.
-    corner_radius = 0
+    corner_radius = 2
 
     # Ignore the dbus closeNotification message.
     # Useful to enforce the timeout set by dunst configuration. Without this
@@ -309,7 +309,7 @@
     # history = ctrl+grave
 
     # Context menu. Equivalent dunstctl command:
-    # dunstctl context
+
     # context = ctrl+shift+period
 
 [urgency_low]

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+title=$1
+
+if [ "${title}" == "" ]; then
+	echo "Sets current window's title."
+	echo " Usage: $0 <title>"
+	exit 1
+fi
+xdotool getactivewindow set_window --name "${title}"
+

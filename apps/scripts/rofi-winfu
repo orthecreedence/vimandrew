@@ -2,39 +2,42 @@
 #
 # Usage: rofi -modi winfu:./rofi-winfu -show winfu
 
+HIDE_CURRENT_WINDOW=1
+# Note this separator is actually a wonky unicode char that looks like a space
+# but doesn't trigger rofi's tokenizing heh heh
+SEP=' '
+
 if [ "$1" == "" ]; then
-	winlist=$(wmctrl -l)
-	cur_desktop=$(wmctrl -d | grep -P '^[0-9]+ +\*' | awk '{print $1}')
+	if [ "${HIDE_CURRENT_WINDOW}" == "1" ]; then
+		cur_win=$(printf "0x%08X" $(xdotool getwindowfocus))
+	fi
+	cur_desktop="<nope>"
+	desktops="$(wmctrl -d | awk '{$2=""; $3=""; $4=""; $5=""; $6=""; $7=""; $8=""; print $0}')"
+	res=""
 	while IFS= read -r line; do
 		id="$(echo "${line}" | awk '{print $1}')"
-		xprop="$(xprop -id ${id})"
 		desktop_id="$(echo "${line}" | awk '{print $2}')"
-		machine="$(echo "${line}" | awk '{print $3}')"
+		desktop_name="$(echo "${desktops}" | grep "^${desktop_id} " | awk '{$1=""; print $0}' | sed 's/^ \+//')"
 		title="$(echo "${line}" | awk '{$1 = ""; $2 = ""; $3 = ""; print $0}' | sed 's/^ \+//')"
 		class="$(xprop -id ${id} WM_CLASS | sed 's/.*, //' | sed 's/"//g')"
-		wintype="$(xprop -id ${id} _NET_WM_WINDOW_TYPE | sed 's/.*= //')"
-		sticky="$(echo "${xprop}" | grep _NET_WM_STATE_STICKY)"
 
-		if
-			[ "${wintype}" == "_NET_WM_WINDOW_TYPE_DOCK" ] ||
-			[ "${wintype}" == "_NET_WM_WINDOW_TYPE_DESKTOP" ] ||
-			[ "${wintype}" == "_NET_WM_WINDOW_TYPE_DIALOG" ]; then
-			continue
+		if [ "${HIDE_CURRENT_WINDOW}" == "1" ]; then
+			if [ "${id}" == "${cur_win}" ]; then
+				continue;
+			fi
 		fi
 
-		if 
-			[ "${desktop_id}" != "${cur_desktop}" ] &&
-			[ "${desktop_id}" != "-1" ] &&
-			[ "${sticky}" == "" ]; then
-			continue
+		winline="W:${desktop_name}|${class}|${title}|${id}"
+		if [ "${res}" == "" ]; then
+			res="${winline}"
+		else
+			res="${res}"$'\n'"${winline}"
 		fi
-
-		#echo "${class} ${title} ${id}" | sed 's/ /|/g'
-		echo "${class} ${title} ${id}" | sed 's/ / /g'
-		#echo "${class} - ${title} - ${id}"
-	done <<< "${winlist}"
+	done <<< "$(wmctrl -l)"
+	echo "${res}" \
+			| column -t -s '|' -o "${SEP}${SEP}"
 else
-	id=$(echo $1 | sed 's/.*|0x/0x/')
+	id=$(echo "$1" | sed 's/.*0x/0x/')
 	wmctrl -i -a ${id}
 fi
 
