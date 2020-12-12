@@ -157,9 +157,9 @@ bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 
 # grave
-bindcode $mod+49 exec "rofi -show drun"
+bindcode $mod+49 exec --no-startup-id rofi -show drun
 # tab
-bindcode $mod+23 exec "rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu"
+bindcode $mod+23 exec --no-startup-id rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu
 #bindcode $mod+23 exec "rofi -show window"
 bindsym $mod+Shift+1 exec firefox
 bindsym $mod+Shift+2 exec gvim
