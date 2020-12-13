@@ -149,6 +149,12 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 # shareef don't like it...lock the taskbar. lock the taskbar.
 bindsym $mod+x exec --no-startup-id ~/apps/scripts/locker $bg auto -e
 
+# scratchpad
+for_window [instance="__scratchy"] move scratchpad; scratchpad show; move position 190px 0px; resize set 1600 600; move scratchpad
+bindcode $mod+47 move scratchpad
+bindcode $mod+48 scratchpad show
+bindcode 96 exec --no-startup-id ~/apps/scripts/i3-scratchy
+
 # custom bindings
 
 # read 1 character and mark the current window with this character

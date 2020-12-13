@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "$(xdotool search --classname __scratchy getwindowname)" == "" ]; then
+	i3-msg 'exec urxvt -bg rgba:0000/0000/0000/c800 --depth 32 -name __scratchy'
+	sleep 0.1
+fi
+i3-msg '[instance="__scratchy"] scratchpad show'
+
