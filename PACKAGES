@@ -1,11 +1,11 @@
 i3-wm
 i3status-rust
+i3lock
 ttf-font-awesome
 dunst
 rofi
 picom
 wmctrl
 xdotool
-i3lock
 feh
 
