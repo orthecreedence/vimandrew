@@ -20,6 +20,9 @@ focus_follows_mouse no
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:DejaVu Sans Mono 11
 
+# and don't forget the key repeat people, who live in our precious sewers
+exec --no-startup-id xset r rate 200 25
+
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
