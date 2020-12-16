@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $(find -L . -type d | fzf --info=hidden)
+

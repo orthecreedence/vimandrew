@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export PATH=$PATH:~/apps/scripts
+
+alias ls='ls --color=auto'
+alias fcd='source fcd-loader'
+
