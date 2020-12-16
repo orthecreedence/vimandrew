@@ -27,6 +27,7 @@ sudo locale-gen
 ## xorg
 
 pacman -S xorg lightdm lightdm-gtk-greeter
+systemctl enable lightdm
 
 ## pacman
 
