@@ -8,6 +8,8 @@ ttf-dejavu
 ttf-font-awesome
 dunst
 rofi
+fzf
+ranger
 picom
 wmctrl
 xdotool
