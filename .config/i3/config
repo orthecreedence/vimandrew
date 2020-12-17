@@ -9,16 +9,17 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+# ------------------------------------------------------------------------------
+# vars
+# ------------------------------------------------------------------------------
+
 set $mod Mod4
 set $alt Mod1
 set $bg ~/media/photos/pripyat.jpg
 
-title_align center
-focus_follows_mouse no
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:DejaVu Sans Mono 11
+# ------------------------------------------------------------------------------
+# init
+# ------------------------------------------------------------------------------
 
 # and don't forget the key repeat people, who live in our precious sewers
 exec_always --no-startup-id xset r rate 500 25
@@ -38,6 +39,7 @@ exec_always --no-startup-id feh --bg-fill $bg
 exec_always --no-startup-id dunst
 exec_always --no-startup-id lxpolkit
 exec_always --no-startup-id picom --no-vsync
+exec_always --no-startup-id xrdb ~/.Xresources
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -45,6 +47,12 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+# ------------------------------------------------------------------------------
+# window mgmt
+# ------------------------------------------------------------------------------
+
+focus_follows_mouse no
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $alt
@@ -102,6 +110,37 @@ bindsym $mod+bracketleft focus parent
 # focus the child container
 bindsym $mod+bracketright focus child
 
+# resize window (you can also use the mouse for that)
+mode "resize" {
+	# These bindings trigger as soon as you enter the resize mode
+
+	# Pressing left will shrink the window’s width.
+	# Pressing right will grow the window’s width.
+	# Pressing up will shrink the window’s height.
+	# Pressing down will grow the window’s height.
+	bindsym h resize shrink width 10 px or 10 ppt
+	bindsym j resize grow height 10 px or 10 ppt
+	bindsym k resize shrink height 10 px or 10 ppt
+	bindsym l resize grow width 10 px or 10 ppt
+
+	# same bindings, but for the arrow keys
+	bindsym Left resize shrink width 10 px or 10 ppt
+	bindsym Down resize grow height 10 px or 10 ppt
+	bindsym Up resize shrink height 10 px or 10 ppt
+	bindsym Right resize grow width 10 px or 10 ppt
+
+	# back to normal: Enter or Escape or $mod+r
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# ------------------------------------------------------------------------------
+# workspace mgmt
+# ------------------------------------------------------------------------------
+
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1"
@@ -143,6 +182,10 @@ bindsym $mod+Control+8 move container to workspace number $ws8
 bindsym $mod+Control+9 move container to workspace number $ws9
 bindsym $mod+Control+0 move container to workspace number $ws10
 
+# ------------------------------------------------------------------------------
+# general bindings
+# ------------------------------------------------------------------------------
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -155,34 +198,42 @@ bindsym $mod+x exec --no-startup-id ~/apps/scripts/locker $bg auto -e
 # scratchpad
 bindcode $mod+47 move scratchpad
 bindcode $mod+48 scratchpad show
-for_window [instance="__scratchy"] move scratchpad; scratchpad show; border pixel 1; move position 190px 0px; resize set 1600 600; move scratchpad
+for_window [instance="__scratchy"] move scratchpad; scratchpad show; border pixel 3; move position 190px 0px; resize set 1600 600; move scratchpad
 bindsym $mod+s exec --no-startup-id ~/apps/scripts/i3-scratchy
-
-# ------------------------------------------------------------------------------
-# custom bindings
-# ------------------------------------------------------------------------------
 
 # read 1 character and mark the current window with this character
 bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 # read 1 character and go to the window with the character
 bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 
-# grave
+# win+`
 bindcode $mod+49 exec --no-startup-id rofi -show drun
-# tab
+# win+tab
 bindcode $mod+23 exec --no-startup-id rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu
-#bindcode $mod+23 exec "rofi -show window"
 bindsym $mod+Shift+1 exec firefox
 bindsym $mod+Shift+2 exec gvim
 bindsym $mod+Shift+3 exec i3-sensible-terminal
-#bindsym $mod+Shift+3 exec xfce4-terminal
 bindsym $mod+Shift+4 exec thunar
 bindsym $mod+Shift+5 exec google-chrome
-bindcode $mod+60 exec dunstctl close					# >
-bindcode $mod+Shift+60 exec dunstctl close-all			# >
-bindcode $mod+59 exec dunstctl history-pop				# <
-bindcode $mod+61 exec dunstctl context					# /
-bindcode $mod+Shift+61 exec dunstctl set-paused toggle	# /
+# win+.
+bindcode $mod+60 exec dunstctl close
+# win+>
+bindcode $mod+Shift+60 exec dunstctl close-all
+# win+,
+bindcode $mod+59 exec dunstctl history-pop
+# win+/
+bindcode $mod+61 exec dunstctl context
+# win+?
+bindcode $mod+Shift+61 exec dunstctl set-paused toggle
+
+# Pulse Audio Controls
+#bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% # Increase
+#bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% # Decrease
+#bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # Mute
+
+# ------------------------------------------------------------------------------
+# window rules
+# ------------------------------------------------------------------------------
 
 for_window [window_role="About"] floating enable
 for_window [class="firefox"] border pixel 0
@@ -193,34 +244,35 @@ for_window [class="thunar"] floating enable
 for_window [class="Pamac-manager"] floating enable
 for_window [class="Gnome-calculator"] floating enable
 
+# ------------------------------------------------------------------------------
+# appearance
+# ------------------------------------------------------------------------------
+
 hide_edge_borders smart
+default_border normal 3
+default_floating_border normal 3
 
-# resize window (you can also use the mouse for that)
-mode "resize" {
-	# These bindings trigger as soon as you enter the resize mode
+title_align center
+font pango:DejaVu Sans Mono 11
 
-	# Pressing left will shrink the window’s width.
-	# Pressing right will grow the window’s width.
-	# Pressing up will shrink the window’s height.
-	# Pressing down will grow the window’s height.
-	bindsym h resize shrink width 10 px or 10 ppt
-	bindsym j resize grow height 10 px or 10 ppt
-	bindsym k resize shrink height 10 px or 10 ppt
-	bindsym l resize grow width 10 px or 10 ppt
-
-	# same bindings, but for the arrow keys
-	bindsym Left resize shrink width 10 px or 10 ppt
-	bindsym Down resize grow height 10 px or 10 ppt
-	bindsym Up resize shrink height 10 px or 10 ppt
-	bindsym Right resize grow width 10 px or 10 ppt
-
-	# back to normal: Enter or Escape or $mod+r
-	bindsym Return mode "default"
-	bindsym Escape mode "default"
-	bindsym $mod+r mode "default"
-}
-
-bindsym $mod+r mode "resize"
+set $background  #000000dd
+set $black       #282828
+set $darkblack   #1d2021
+set $darkred     #ac444d
+set $red         #fb4934
+set $darkgreen   #98971a
+set $green       #b8bb26
+set $yellow      #d79921
+set $darkyellow  #9e7018
+set $darkblue    #3d5c6a
+set $blue        #83a598
+set $darkmagenta #b16286
+set $magenta     #d3869b
+set $darkcyan    #689d6a
+set $cyan        #8ec07c
+set $darkwhite   #cccccc
+set $darkgray    #888888
+set $white       #ffffff
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -231,7 +283,24 @@ bar {
 	tray_padding 3
 	font pango:DejaVu Sans Mono 12
 	workspace_min_width 40
-	colors {
-		background #000000d0
-	}
+    colors {
+        statusline         $white
+        background         $background
+        separator          $background
+
+        #                  BORDER       BACKGROUND   TEXT
+        focused_workspace  $background $darkblue $white
+        inactive_workspace $background $background $white
+        active_workspace   $background $background $white
+        urgent_workspace   $darkred     $darkred     $white
+        binding_mode       $darkred     $darkred     $white
+    }
 }
+
+# <colorclass>          <border> <background> <text> <indicator> <child_border>
+client.focused          $darkblue      $darkblue      $white  $darkyellow  $darkblue
+client.focused_inactive $darkblack      $darkblack      $darkyellow      $darkblack  $background
+client.unfocused        $darkblack      $darkblack      $darkgray      $darkblack  $background
+client.urgent           $darkred    $darkred    $black      $darkred    $darkred
+client.background       $black
+
