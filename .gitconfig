@@ -5,6 +5,7 @@
 ;
 [core]
 	mergeoptions = --no-edit
+	editor = vim
 
 [merge]
 	edit = no
@@ -12,3 +13,7 @@
 [user]
 	email = andrew@killtheradio.net
 	name = Andrew Danger Lyon
+
+[pull]
+	rebase = false
+
