@@ -1,0 +1,4 @@
+#!/bin/bash
+
+element-desktop --disable-gpu
+
