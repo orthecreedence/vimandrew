@@ -1,7 +1,16 @@
 #!/bin/bash
 
-export PATH=$PATH:~/apps/scripts
+export PATH=$PATH:$HOME/apps/bin:$HOME/apps/scripts:$HOME/.local/bin/
+export PATH="$HOME/.cargo/bin:$PATH"
+export GIT_MERGE_AUTOEDIT=no
 
 alias ls='ls --color=auto'
 alias fcd='source fcd-loader'
+alias cgrep='grep -lr --exclude-dir=target --exclude-dir=.git --exclude-dir=node_modules'
+
+# Disable progrmatic bash completion
+shopt -u progcomp
+
+# make chrome great again
+ulimit -S -n 4096
 
