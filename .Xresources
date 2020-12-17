@@ -1,10 +1,10 @@
 Xft.dpi: 96
 
 !! URxvt Appearance
-URxvt.font: xft:DejaVuSansMono:pixelsize=16
-URxvt.boldFont: xft:DejaVuSansMono:pixelsize=16
-URxvt.italicFont: xft:DejaVuSansMono:pixelsize=16
-URxvt.boldItalicfont: xft:DejaVuSansMono:pixelsize=16
+URxvt.font: xft:DejaVuSansMono:pixelsize=15
+URxvt.boldFont: xft:DejaVuSansMono:pixelsize=15
+URxvt.italicFont: xft:DejaVuSansMono:pixelsize=15
+URxvt.boldItalicfont: xft:DejaVuSansMono:pixelsize=15
 URxvt.letterSpace: 0
 URxvt.lineSpace: 0
 URxvt.geometry: 92x24
