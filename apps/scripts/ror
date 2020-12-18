@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# takes the currently active window, finds other instances of it (making note of
-# their 
-
