@@ -6,6 +6,6 @@ killall -q polybar
 # polybar-msg cmd quit
 
 # Launch bar1 and bar2
-polybar primary >/tmp/polybar1.log 2>&1 & disown
+polybar -c ~/.config/polybar/config-andrew -r primary >/tmp/polybar1.log 2>&1 & disown
 
 echo "Bars launched..."
