@@ -11,16 +11,16 @@ block = "music"
 player = "spotify"
 buttons = ["prev", "play", "next"]
 
-[[block]]
-block = "disk_space"
-format = "{alias} {available} {unit}"
-path = "/"
-alias = "/"
-info_type = "available"
-unit = "GB"
-interval = 20
-warning = 20.0
-alert = 10.0
+#[[block]]
+#block = "disk_space"
+#format = "{alias} {available} {unit}"
+#path = "/"
+#alias = "/"
+#info_type = "available"
+#unit = "GB"
+#interval = 20
+#warning = 20.0
+#alert = 10.0
 
 [[block]]
 block = "cpu"
@@ -36,7 +36,7 @@ icons = true
 
 [[block]]
 block = "net"
-device = "enp0s3"
+device = "wlp59s0"
 #format = "{speed_down} {speed_up} {graph_down}"
 format = "{speed_down} {speed_up}"
 interval = 1
@@ -53,7 +53,7 @@ collapsed = true
 interval = 10
 format = "{average}°"
 chip = "*-isa-*"
-inputs = ["CPUTIN", "SYSTIN"]
+#inputs = ["TMPIN", "CPUTIN", "SYSTIN"]
 
 [[block]]
 block = "battery"

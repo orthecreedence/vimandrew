@@ -1,3 +1,7 @@
+# Razer suspend loop
+
+GRUB_CMDLINE_LINUX_DEFAULT="... button.lid_init_state=open" # Razer blade suspend loop fix
+
 # theme
 
 Theme: Yaru

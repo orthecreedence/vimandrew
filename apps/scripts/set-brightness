@@ -7,8 +7,6 @@
 
 export PATH=$PATH:~/apps/scripts
 
-PULSE=""	# "-D pulse"
-
 function get_volume {
 	amixer get Master | grep '%' | head -n 1 | cut -d '[' -f 2 | cut -d '%' -f 1
 }
@@ -18,32 +16,27 @@ function is_mute {
 }
 
 function send_notification {
-	volume=`get_volume`
+	percent=$((100 * `brightnessctl g` / `brightnessctl m`))
 	/usr/bin/dunstify \
-		-i audio-volume-high \
+		-i /usr/share/icons/gnome/scalable/status/display-brightness-symbolic.svg \
 		-t 2000 \
 		-u low \
-		-h string:x-canonical-private-synchronous:volume \
-		-h int:value:${volume} \
-		"Volume: "
+		-h string:x-canonical-private-synchronous:brightness \
+		-h int:value:${percent} \
+		"Brightness: "
 }
 
 case $1 in
 	up)
-		amixer ${PULSE} set Master unmute 5%+ > /dev/null
+		brightnessctl set 10%+
 		send_notification
 		;;
 	down)
-		amixer ${PULSE} set Master unmute 5%- > /dev/null
-		send_notification
-		;;
-	mute)
-		# Toggle mute
-		amixer ${PULSE} set Master toggle > /dev/null
-		if is_mute ; then
-			dunstify -i audio-volume-muted -t 2000 -r 9000 -u low "Mute"
-		else
+		cur=$(brightnessctl g)
+		if [ "${cur}" -gt 100 ]; then
+			brightnessctl set 10%-
 			send_notification
 		fi
 		;;
 esac
+

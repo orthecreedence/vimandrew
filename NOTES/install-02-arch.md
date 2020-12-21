@@ -8,8 +8,9 @@ arch-chroot /mnt
 ## networking 
 
 ip-link		# shows devices, aka enp0s3
-systemctl enable dhcpcd@enp0s3.service
-systemctl start dhcpcd@enp0s3.service
+# ethernet
+#systemctl enable dhcpcd@enp0s3.service
+#systemctl start dhcpcd@enp0s3.service
 
 ## swap
 

@@ -25,7 +25,10 @@ mkinitcpio -P
 lsblk -o +UUID
 
 vim /etc/default/grub
+
   - GRUB_CMDLINE_LINUX="cryptdevice=UUID=<DEVSDA2UUID>:<name> root=/dev/<GName>/root"
+  - GRUB_CMDLINE_LINUX_DEFAULT="... button.lid_init_state=open" # Razer blade suspend loop fix
+
 grub-install –boot-directory=/boot –efi-directory=/boot/efi /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
 

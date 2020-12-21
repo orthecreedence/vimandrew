@@ -37,24 +37,15 @@ exec --no-startup-id xautolock -time 10 -locker '/home/andrew/apps/scripts/locke
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+exec --no-startup-id redshift-gtk
+exec --no-startup-id ~/apps/scripts/disable-touchpad-click-while-typing.sh
+
 exec_always --no-startup-id feh --bg-fill $bg
 exec_always --no-startup-id dunst
 exec_always --no-startup-id lxpolkit
-exec_always --no-startup-id picom --no-vsync
+exec_always --no-startup-id picom
 exec_always --no-startup-id xrdb ~/.Xresources
-exec_always --no-startup-id syndaemon -i 0.5 -K -t -R -d
-exec_always --no-startup-id redshift-gtk
 exec_always --no-startup-id screen-timeout normal
-
-# Use pactl to adjust volume in PulseAudio.
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-
-bindcode 232 exec --no-startup-id brightnessctl set 10%-
-bindcode 233 exec --no-startup-id brightnessctl set 10%+
 
 # ------------------------------------------------------------------------------
 # window mgmt
@@ -180,7 +171,7 @@ bindsym $mod+0 workspace number $ws10
 
 # win+pgup
 bindcode $mod+112 workspace prev
-# win+dn
+# win+pgdn
 bindcode $mod+117 workspace next
 # alt+tab
 bindcode $alt+23 workspace back_and_forth
@@ -224,7 +215,7 @@ bindsym $mod+m exec i3-input -F 'mark %s' -l 1 -P 'Mark: '
 bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 
 # win+`
-bindcode $mod+49 exec --no-startup-id rofi -show run
+bindcode $mod+49 exec --no-startup-id bash -c "rofi -show run"
 # win+tab
 bindcode $mod+23 exec --no-startup-id rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu
 bindsym $mod+Shift+1 exec firefox
@@ -244,10 +235,28 @@ bindcode $mod+61 exec dunstctl context
 # win+?
 bindcode $mod+Shift+61 exec dunstctl set-paused toggle
 
-# Pulse Audio Controls
-#bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% # Increase
-#bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% # Decrease
-#bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # Mute
+# volume keys via amixer
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/apps/scripts/set-volume up
+bindsym XF86AudioLowerVolume exec --no-startup-id ~/apps/scripts/set-volume down
+bindsym XF86AudioMute exec --no-startup-id ~/apps/scripts/set-volume mute
+bindsym XF86AudioMicMute exec --no-startup-id amixer set Mic toggle
+
+# screen brightness keys
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/apps/scripts/set-brightness down
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/apps/scripts/set-brightness up
+
+# toggle touchpad
+bindsym XF86TouchpadToggle exec --no-startup-id ~/apps/scripts/touchpad-toggle
+
+# music!
+bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+bindsym XF86AudioPause exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+# ctrl+alt+insert
+bindcode Ctrl+$alt+118 exec --no-startup-id playerctl play
+# ctrl+alt+end
+bindcode Ctrl+$alt+115 exec --no-startup-id playerctl stop
 
 # ------------------------------------------------------------------------------
 # window rules
