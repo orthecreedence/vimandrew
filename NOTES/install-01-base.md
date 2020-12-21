@@ -13,4 +13,7 @@ Interface: Segeo UI Semibold 11
 
 - `google-chrome --force-device-scale-factor=1.25`
 
+## suspend lock screen
+
+https://gist.github.com/victorhaggqvist/603125bbc0f61a787d89
 

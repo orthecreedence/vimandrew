@@ -1,0 +1,11 @@
+#!/bin/bash
+
+case "$1" in
+	"lock")
+		/usr/bin/xset dpms 10 10 10
+		;;
+	*)
+		/usr/bin/xset dpms 300 300 300
+		;;
+esac
+

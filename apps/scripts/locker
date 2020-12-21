@@ -1,17 +1,25 @@
 #!/bin/bash
 
+export PATH=$PATH:/home/andrew/apps/scripts
 img=$1
-res=$2		# 1920x1080
-if [ "$(echo $img | grep -P '\.(png|jpg|jpeg)')" != "" ] && ( [ "$(echo $res | grep -P '[0-9]+x[0-9]+')" != "" ] || [ "$res" == "auto" ] ); then
-	shift
-	shift
-	if [ "$res" == "auto" ]; then
-		res=$(xdpyinfo | grep dimens | awk '{print $2}')
-	fi
-	convert $img -gravity center -resize ${res}^ -crop ${res}+0+0 +repage -brightness-contrast -10x0 -blur 16x16 RGB:- \
-		| i3lock --raw ${res}:rgb --image /dev/stdin $@
+
+if [ "${img}" == "" ]; then
+	img="/home/andrew/media/photos/pripyat.jpg"
 else
-	i3lock $@
+	shift
 fi
 
+function cleanup {
+	dunstctl set-paused false
+	screen-timeout normal
+}
+
+trap cleanup EXIT HUP INT TERM
+
+dunstctl set-paused true
+screen-timeout lock
+res=$(xdpyinfo | grep dimens | awk '{print $2}')
+convert $img -gravity center -resize ${res}^ -crop ${res}+0+0 +repage -brightness-contrast -10x0 -blur 16x16 RGB:- \
+	| /usr/bin/i3lock -e --raw ${res}:rgb --image /dev/stdin $@
+cleanup
 

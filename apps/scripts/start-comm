@@ -1,0 +1,6 @@
+#!/bin/bash
+
+element-desktop &
+slack &
+discord &
+
