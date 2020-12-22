@@ -28,7 +28,7 @@ secondary = #e60053
 alert = #bd2c40
 
 [i3colors]
-background = #000000dd
+background = #dd000000
 black = #282828
 darkblack = #1d2021
 darkred = #ac444d
@@ -50,13 +50,13 @@ white = #ffffff
 [bar/primary]
 ;monitor = ${env:MONITOR:HDMI-1}
 width = 100%
-height = 27
+height = 30
 ;offset-x = 1%
 ;offset-y = 1%
 radius = 6.0
 fixed-center = false
 
-background = ${colors.background}
+background = ${i3colors.background}
 foreground = ${colors.foreground}
 
 line-size = 0
@@ -71,12 +71,13 @@ padding-right = 2
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = fixed:pixelsize=11;1
-font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
-font-2 = siji:pixelsize=11;1
+font-0 = RobotoMono:size=11;3
+font-1 = unifont:fontformat=truetype:size=8:antialias=false;4
+font-2 = Typicons:style=Regular:size=22;6
+font-3 = Font Awesome 5 Free,Font Awesome 5 Free Solid:style=Solid:size=13;4
 
 modules-left = i3
-modules-center = mpd
+modules-center = 
 modules-right = cpu memory wlan eth battery temperature alsa pulseaudio date
 
 tray-position = right
@@ -121,7 +122,7 @@ wrapping-scroll = false
 ; Only show workspaces on the same output as the bar
 ;pin-workspaces = true
 
-label-mode-padding = 2
+label-mode-padding = 3
 label-mode-foreground = #000
 label-mode-background = ${colors.primary}
 
@@ -129,11 +130,11 @@ label-mode-background = ${colors.primary}
 label-focused = %index%
 label-focused-background = ${i3colors.darkblue}
 #label-focused-underline= ${colors.primary}
-label-focused-padding = 3
+label-focused-padding = 2
 
 ; unfocused = Inactive workspace on any monitor
 label-unfocused = %index%
-label-unfocused-padding = 3
+label-unfocused-padding = 2
 
 ; visible = Active workspace on unfocused monitor
 label-visible = %index%
@@ -166,27 +167,94 @@ label-song-ellipsis = true
 [module/cpu]
 type = internal/cpu
 interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
+;format-prefix = " "
+;format-prefix-foreground = ${colors.foreground-alt}
 format-underline = #f90000
+format = <bar-load> <label>
 label = %percentage:2%%
+
+bar-load-indicator =
+bar-load-width = 10
+bar-load-foreground-0 = ${i3colors.blue}
+bar-load-foreground-1 = ${i3colors.blue}
+bar-load-foreground-2 = ${i3colors.blue}
+bar-load-foreground-3 = ${i3colors.blue}
+bar-load-foreground-4 = ${i3colors.blue}
+bar-load-foreground-5 = ${i3colors.magenta}
+bar-load-foreground-6 = ${i3colors.magenta}
+bar-load-foreground-7 = ${i3colors.darkred}
+bar-load-foreground-9 = ${i3colors.darkred}
+bar-load-fill = ▐
+bar-load-empty = ▐
+bar-load-empty-foreground = #444444
+
+ramp-coreload-spacing = 0
+ramp-coreload-0 = ▁
+ramp-coreload-0-foreground = ${i3colors.blue}
+ramp-coreload-1 = ▂
+ramp-coreload-1-foreground = ${i3colors.blue}
+ramp-coreload-2 = ▃
+ramp-coreload-2-foreground = ${i3colors.blue}
+ramp-coreload-3 = ▄
+ramp-coreload-3-foreground = ${i3colors.blue}
+ramp-coreload-4 = ▅
+ramp-coreload-4-foreground = ${i3colors.yellow}
+ramp-coreload-5 = ▆
+ramp-coreload-5-foreground = ${i3colors.yellow}
+ramp-coreload-6 = ▇
+ramp-coreload-6-foreground = ${i3colors.darkmagenta}
+ramp-coreload-7 = █
+ramp-coreload-7-foreground = ${i3colors.darkmagenta}
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
+;format-prefix = " "
+;format-prefix-foreground = ${colors.foreground-alt}
 format-underline = #4bffdc
 label = %percentage_used%%
+format = <bar-used> <label>
+
+ramp-used-0 = ▁
+ramp-used-0-foreground = ${i3colors.blue}
+ramp-used-1 = ▂
+ramp-used-1-foreground = ${i3colors.blue}
+ramp-used-2 = ▃
+ramp-used-2-foreground = ${i3colors.blue}
+ramp-used-3 = ▄
+ramp-used-3-foreground = ${i3colors.blue}
+ramp-used-4 = ▅
+ramp-used-4-foreground = ${i3colors.blue}
+ramp-used-5 = ▆
+ramp-used-5-foreground = ${i3colors.blue}
+ramp-used-6 = ▇
+ramp-used-6-foreground = ${i3colors.blue}
+ramp-used-7 = █
+ramp-used-7-foreground = ${i3colors.blue}
+
+bar-used-indicator =
+bar-used-width = 10
+bar-used-foreground-0 = ${i3colors.blue}
+bar-used-foreground-1 = ${i3colors.blue}
+bar-used-foreground-2 = ${i3colors.blue}
+bar-used-foreground-3 = ${i3colors.blue}
+bar-used-foreground-4 = ${i3colors.blue}
+bar-used-foreground-5 = ${i3colors.blue}
+bar-used-foreground-6 = ${i3colors.blue}
+bar-used-foreground-7 = ${i3colors.yellow}
+bar-used-foreground-9 = ${i3colors.yellow}
+bar-used-fill = ▐
+bar-used-empty = ▐
+bar-used-empty-foreground = #444444
 
 [module/wlan]
 type = internal/network
 interface = wlp59s0
-interval = 3.0
+interval = 2.0
 
 format-connected = <ramp-signal> <label-connected>
 format-connected-underline = #9f78e1
-label-connected = %essid%
+label-connected = %downspeed% %upspeed%
 
 format-disconnected =
 ;format-disconnected = <label-disconnected>
@@ -194,11 +262,11 @@ format-disconnected =
 ;label-disconnected = %ifname% disconnected
 ;label-disconnected-foreground = ${colors.foreground-alt}
 
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
 ramp-signal-foreground = ${colors.foreground-alt}
 
 [module/eth]
@@ -221,17 +289,17 @@ format-disconnected =
 type = internal/date
 interval = 5
 
-date =
-date-alt = "%a %b %d"
+date = " %a %b %d"
+;date-alt = " %a %b %d"
 
-time = %l:%M %P
-time-alt = %l:%M %P
+time = "%l:%M %P"
+;time-alt = %l:%M %P
 
-format-prefix = 
+format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = #0a6cf5
 
-label = " %date% %time%"
+label = "%date% %time%"
 
 [module/pulseaudio]
 type = internal/pulseaudio
@@ -263,25 +331,28 @@ bar-volume-empty-foreground = ${colors.foreground-alt}
 [module/alsa]
 type = internal/alsa
 
+format-volume-prefix = " "
+format-volume-prefix-foreground = ${colors.foreground-alt}
 format-volume = <label-volume> <bar-volume>
-label-volume = VOL
-label-volume-foreground = ${root.foreground}
+label-volume = 
+label-volume-foreground = ${root.foreground-alt}
 
-format-muted-prefix = " "
+format-muted-prefix = " "
 format-muted-foreground = ${colors.foreground-alt}
 label-muted = muted
 
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
+bar-volume-width = 6
+bar-volume-foreground-0 = ${i3colors.blue}
+bar-volume-foreground-1 = ${i3colors.blue}
+bar-volume-foreground-2 = ${i3colors.blue}
+bar-volume-foreground-3 = ${i3colors.blue}
+bar-volume-foreground-4 = ${i3colors.blue}
+bar-volume-foreground-5 = ${i3colors.yellow}
+bar-volume-foreground-6 = ${i3colors.red}
 bar-volume-gradient = false
 bar-volume-indicator = |
 bar-volume-indicator-font = 2
+bar-volume-indicator-foreground = ${i3colors.blue}
 bar-volume-fill = ─
 bar-volume-fill-font = 2
 bar-volume-empty = ─
@@ -290,40 +361,48 @@ bar-volume-empty-foreground = ${colors.foreground-alt}
 
 [module/battery]
 type = internal/battery
+interval = 5
 battery = BAT0
 adapter = AC0
 full-at = 98
 
 format-charging = <animation-charging> <label-charging>
+format-charging-foreground = ${i3colors.darkblue}
 format-charging-underline = #ffb52a
 
-format-discharging = <animation-discharging> <label-discharging>
+format-discharging = <ramp-capacity> <label-discharging>
 format-discharging-underline = ${self.format-charging-underline}
 
-format-full-prefix = " "
-format-full-prefix-foreground = ${colors.foreground-alt}
+format-full-prefix = " "
+format-full-prefix-foreground = ${i3colors.blue}
 format-full-underline = ${self.format-charging-underline}
 
-ramp-capacity-0 = 
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-foreground = ${colors.foreground-alt}
+ramp-capacity-0 = 
+ramp-capacity-0-foreground = ${i3colors.red}
+ramp-capacity-1 = 
+ramp-capacity-1-foreground = ${i3colors.blue}
+ramp-capacity-2 = 
+ramp-capacity-2-foreground = ${i3colors.blue}
+ramp-capacity-3 = 
+ramp-capacity-3-foreground = ${i3colors.blue}
 
-animation-charging-0 = 
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-foreground = ${colors.foreground-alt}
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-foreground = ${i3colors.blue}
 animation-charging-framerate = 750
 
-animation-discharging-0 = 
-animation-discharging-1 = 
-animation-discharging-2 = 
-animation-discharging-foreground = ${colors.foreground-alt}
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-foreground = ${i3colors.blue}
 animation-discharging-framerate = 750
 
 [module/temperature]
 type = internal/temperature
 thermal-zone = 0
+base-temperature = 20
 warn-temperature = 60
 
 format = <ramp> <label>
@@ -332,13 +411,19 @@ format-warn = <ramp> <label-warn>
 format-warn-underline = ${self.format-underline}
 
 label = %temperature-c%
-label-warn = %temperature-c%
-label-warn-foreground = ${colors.secondary}
+label-warn = %temperature-c% !!HOT!!
+label-warn-foreground = ${i3colors.red}
 
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = ${colors.foreground-alt}
+ramp-0 = 
+ramp-0-foreground = ${i3colors.blue}
+ramp-1 = 
+ramp-1-foreground = ${i3colors.blue}
+ramp-2 = 
+ramp-2-foreground = ${i3colors.blue}
+ramp-3 = 
+ramp-3-foreground = ${i3colors.yellow}
+ramp-4 = 
+ramp-4-foreground = ${i3colors.red}
 
 [module/powermenu]
 type = custom/menu
