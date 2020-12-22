@@ -289,11 +289,11 @@ format-disconnected =
 type = internal/date
 interval = 5
 
-date = " %a %b %d"
-;date-alt = " %a %b %d"
+date =
+date-alt = " %a %b %d"
 
-time = "%l:%M %P"
-;time-alt = %l:%M %P
+time = %l:%M %P
+time-alt = %l:%M %P
 
 format-prefix = 
 format-prefix-foreground = ${colors.foreground-alt}
