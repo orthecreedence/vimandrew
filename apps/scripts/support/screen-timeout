@@ -5,7 +5,7 @@ case "$1" in
 		/usr/bin/xset dpms 10 10 10
 		;;
 	*)
-		/usr/bin/xset dpms 300 300 300
+		/usr/bin/xset dpms 600 600 600
 		;;
 esac
 

@@ -23,15 +23,16 @@ set $bg ~/media/photos/pripyat.jpg
 
 # and don't forget the key repeat people, who live in our precious sewers
 exec_always --no-startup-id xset r rate 500 25
-
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
+# set screen saver to start after Ns and then loop after Ys
+# NOTE: this signals xss-lock to load the dim-screen.sh script after Ns and then
+# once Ys has passed, lock the screen
+exec_always --no-startup-id xset s 300 30
+# monitor power management
+exec_always --no-startup-id ~/apps/scripts/support/screen-timeout normal
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- /home/andrew/apps/scripts/locker $bg --nofork
-
-exec --no-startup-id xautolock -time 10 -locker '/home/andrew/apps/scripts/locker $bg'
+exec --no-startup-id xss-lock --notifier=/home/andrew/apps/scripts/support/dim-screen.sh --transfer-sleep-lock -- /home/andrew/apps/scripts/locker $bg --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -45,7 +46,6 @@ exec_always --no-startup-id dunst
 exec_always --no-startup-id lxpolkit
 exec_always --no-startup-id picom
 exec_always --no-startup-id xrdb ~/.Xresources
-exec_always --no-startup-id screen-timeout normal
 
 # ------------------------------------------------------------------------------
 # window mgmt
@@ -199,7 +199,7 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 # shareef don't like it...lock the taskbar. lock the taskbar.
-bindsym $mod+x exec --no-startup-id ~/apps/scripts/locker $bg
+bindsym $mod+x exec --no-startup-id ~/apps/scripts/locker $bg --nofork
 
 # scratchpad
 # win+;
