@@ -409,6 +409,10 @@
     msg_urgency = critical
     fullscreen = show
 
+[cmddone_skip_hist]
+    summary = "Command done"
+    history_ignore = yes
+
 #[espeak]
 #    summary = "*"
 #    script = dunst_espeak.sh

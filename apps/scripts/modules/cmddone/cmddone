@@ -1,8 +1,14 @@
 #!/bin/bash
 
+msg="Your command has completed"
+if [ "$1" == "" ]; then
+	msg="${msg}."
+else
+	msg="${msg}: ${@}"
+fi
 notify-send \
 	-u critical \
 	-i ~/apps/scripts/modules/cmddone/bot.png \
 	'Command done' \
-	'Hello sir/madam. Your long-running command has completed.'
+	"Hello sir/madam. ${msg}"
 
