@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PATH=$PATH:/home/andrew/apps/scripts:/home/andrew/apps/scripts/support
+export PATH=$PATH:/usr/bin:/home/andrew/apps/scripts:/home/andrew/apps/scripts/support
 img=$1
 
 if [ "${img}" == "" ]; then
