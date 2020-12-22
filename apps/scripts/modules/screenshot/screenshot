@@ -1,0 +1,47 @@
+#!/bin/bash
+
+from=$1
+to=$2
+
+function usage() {
+	echo "Usage: screenshot <root|window|selection> <photos|clipboard|/path/to/file.png>"
+	exit 1
+}
+
+if [ "${from}" == "" ] || [ "${to}" == "" ]; then
+	usage
+fi
+
+opts=""
+case $from in
+	"root")
+		;;
+	"window")
+		opts="--window=$(xdotool getactivewindow)"
+		;;
+	"selection")
+		opts="--select --bordersize=4.0 --color=100,255,200,200"
+		;;
+	*)
+		usage
+		;;
+esac
+
+cmd="maim ${opts}"
+
+case $to in
+	"clipboard")
+		cmd="${cmd} | xclip -selection clipboard -t image/png"
+		;;
+	"photos")
+		cmd="${cmd} ~/media/photos/screenshot-$(date +'%Y-%m-%d-%H:%M:%S').png"
+		;;
+	*)
+		cmd="${cmd} ${to}"
+		;;
+esac
+
+echo "${cmd}"
+bash -c "${cmd}"
+aplay ~/apps/scripts/modules/screenshot/350d-shutter.wav
+

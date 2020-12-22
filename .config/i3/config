@@ -258,6 +258,11 @@ bindcode Ctrl+$alt+118 exec --no-startup-id playerctl play
 # ctrl+alt+end
 bindcode Ctrl+$alt+115 exec --no-startup-id playerctl stop
 
+bindsym Print exec --no-startup-id ~/apps/scripts/screenshot root photos
+bindsym Shift+Print exec --no-startup-id ~/apps/scripts/screenshot window photos
+bindsym Ctrl+Print exec --no-startup-id ~/apps/scripts/screenshot selection photos
+bindsym Ctrl+Shift+Print exec --no-startup-id ~/apps/scripts/screenshot selection clipboard
+
 # ------------------------------------------------------------------------------
 # window rules
 # ------------------------------------------------------------------------------
