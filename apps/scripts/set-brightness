@@ -28,13 +28,13 @@ function send_notification {
 
 case $1 in
 	up)
-		brightnessctl set 10%+
+		brightnessctl set 5%+
 		send_notification
 		;;
 	down)
-		cur=$(brightnessctl g)
-		if [ "${cur}" -gt 100 ]; then
-			brightnessctl set 10%-
+		percent=$((100 * `brightnessctl g` / `brightnessctl m`))
+		if [ "${percent}" -gt 7 ]; then
+			brightnessctl set 5%-
 			send_notification
 		fi
 		;;

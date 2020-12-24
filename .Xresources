@@ -18,8 +18,13 @@ URxvt.depth: 24
 URxvt.iso14755: false
 URxvt.internalBorder: 4
 
-URxvt.keysym.Shift-Control-V: eval:paste_clipboard
-URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.perl-ext-common: clipboard,selection-to-clipboard
+URxvt.clipboard.autocopy: true
+URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+!URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+!URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+
 URxvt.keysym.Control-Right: \033[1;5C
 URxvt.keysym.Control-Left: \033[1;5D
 ! Does not work:
@@ -30,8 +35,8 @@ URxvt.foreground:   #eeeeee
 URxvt.background:   #000000
 URxvt.cursorColor:  #eeeeee
 ! black
-URxvt.color0:       #000000
-URxvt.color8:       #343434
+URxvt.color0:       #111111
+URxvt.color8:       #666666
 ! red
 URxvt.color1:       #e92f2f
 URxvt.color9:       #e92f2f

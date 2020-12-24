@@ -7,7 +7,7 @@
 
 export PATH=$PATH:~/apps/scripts
 
-PULSE=""	# "-D pulse"
+PULSE= "-D pulse"
 
 function get_volume {
 	amixer get Master | grep '%' | head -n 1 | cut -d '[' -f 2 | cut -d '%' -f 1
@@ -47,3 +47,8 @@ case $1 in
 		fi
 		;;
 esac
+
+# save the volume state
+# NOTE: no longer needed, thx pulseaudio
+#alsactl --file ~/.config/asound.state store
+

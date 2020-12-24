@@ -78,7 +78,7 @@ font-3 = Font Awesome 5 Free,Font Awesome 5 Free Solid:style=Solid:size=13;4
 
 modules-left = i3
 modules-center = 
-modules-right = cpu memory wlan eth battery temperature alsa pulseaudio date
+modules-right = wlan eth cpu memory battery temperature pulseaudio date
 
 tray-position = right
 tray-padding = 4
@@ -289,39 +289,44 @@ format-disconnected =
 type = internal/date
 interval = 5
 
-date =
-date-alt = " %a %b %d"
+date = " %a %b %d"
+date-alt = ""
 
-time = %l:%M %P
-time-alt = %l:%M %P
+time = "%l:%M %P"
+time-alt = "%l:%M %P"
 
-format-prefix = 
+format-prefix = ""
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = #0a6cf5
+#format = %{A3:gsimplecal:} <label>%{A}
 
 label = "%date% %time%"
 
 [module/pulseaudio]
 type = internal/pulseaudio
 
+format-volume-prefix = " "
+format-volume-prefix-foreground = ${colors.foreground-alt}
 format-volume = <label-volume> <bar-volume>
-label-volume = VOL %percentage%%
-label-volume-foreground = ${root.foreground}
+label-volume = 
+label-volume-foreground = ${root.foreground-alt}
 
-label-muted = 🔇 muted
-label-muted-foreground = #666
+format-muted-prefix = " "
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = muted
 
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
+bar-volume-width = 6
+bar-volume-foreground-0 = ${i3colors.blue}
+bar-volume-foreground-1 = ${i3colors.blue}
+bar-volume-foreground-2 = ${i3colors.blue}
+bar-volume-foreground-3 = ${i3colors.blue}
+bar-volume-foreground-4 = ${i3colors.blue}
+bar-volume-foreground-5 = ${i3colors.yellow}
+bar-volume-foreground-6 = ${i3colors.red}
 bar-volume-gradient = false
 bar-volume-indicator = |
 bar-volume-indicator-font = 2
+bar-volume-indicator-foreground = ${i3colors.blue}
 bar-volume-fill = ─
 bar-volume-fill-font = 2
 bar-volume-empty = ─

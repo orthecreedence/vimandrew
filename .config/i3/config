@@ -34,10 +34,17 @@ exec_always --no-startup-id ~/apps/scripts/support/screen-timeout normal
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --notifier=/home/andrew/apps/scripts/support/dim-screen.sh --transfer-sleep-lock -- /home/andrew/apps/scripts/locker $bg --nofork
 
+# restore volume
+# NOTE: not a thing anymore, thx pulseaudio
+#exec --no-startup-id alsactl --file ~/.config/asound.state restore 
+
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+# gotta sync the ol' ball and chain heh heh
+exec --no-startup-id seafile-applet
+ 
 exec --no-startup-id redshift-gtk
 exec --no-startup-id ~/apps/scripts/disable-touchpad-click-while-typing.sh
 
@@ -206,7 +213,7 @@ bindsym $mod+x exec --no-startup-id ~/apps/scripts/locker $bg --nofork
 bindcode $mod+47 move scratchpad
 # win+'
 bindcode $mod+48 scratchpad show
-for_window [instance="__scratchy"] move scratchpad; scratchpad show; border pixel 3; move position 190px 0px; resize set 1600 600; move scratchpad
+for_window [instance="__scratchy"] move scratchpad; [instance="__scratchy"] scratchpad show; border pixel 3; move position 190px 0px; resize set 1600 500; move scratchpad
 bindsym $mod+s exec --no-startup-id ~/apps/scripts/i3-scratchy
 
 # read 1 character and mark the current window with this character
@@ -219,7 +226,7 @@ bindcode $mod+49 exec --no-startup-id bash -c "rofi -show run"
 # win+tab
 bindcode $mod+23 exec --no-startup-id rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu
 bindsym $mod+Shift+1 exec firefox
-bindsym $mod+Shift+2 exec gvim
+bindsym $mod+Shift+2 exec bash -c "cd ~/dev && gvim"
 bindsym $mod+Shift+3 exec i3-sensible-terminal
 bindsym $mod+Shift+4 exec thunar
 bindsym $mod+Shift+5 exec google-chrome
@@ -236,6 +243,8 @@ bindcode $mod+61 exec dunstctl context
 bindcode $mod+Shift+61 exec dunstctl set-paused toggle
 
 # volume keys via amixer
+#bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+#bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/apps/scripts/set-volume up
 bindsym XF86AudioLowerVolume exec --no-startup-id ~/apps/scripts/set-volume down
 bindsym XF86AudioMute exec --no-startup-id ~/apps/scripts/set-volume mute
@@ -276,7 +285,9 @@ for_window [class="(?i)dunst"] floating enable
 for_window [class="(?i)thunar"] floating enable
 for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)seafile client"] floating enable
-#for_window [class="(?i)keepassxc"] floating enable
+for_window [class="(?i)audacious"] floating enable
+for_window [class="(?i)keepassxc"] floating enable
+for_window [class="(?i)pavucontrol"] floating enable
 
 # ------------------------------------------------------------------------------
 # appearance
