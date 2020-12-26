@@ -1,7 +1,9 @@
 #!/bin/bash
 
+export PATH=$PATH:~/apps/scripts
+
 if [ "$(xdotool search --classname __scratchy getwindowname)" == "" ]; then
-	urxvt -bg rgba:0000/0000/0000/e000 --depth 32 -name __scratchy &
+	whammy-terminal -name __scratchy &
 	sleep 0.2
 fi
 i3-msg '[instance="__scratchy"] scratchpad show'
