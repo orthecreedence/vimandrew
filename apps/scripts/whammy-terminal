@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# and a chocowammy shake
+
+urxvt -bg rgba:0000/0000/0000/e000 --depth 32 $@
+
