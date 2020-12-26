@@ -409,6 +409,11 @@
     msg_urgency = critical
     fullscreen = show
 
+[fullscreen_show_element]
+	#appname = "Element"
+    summary = "*(a+c)*"
+    fullscreen = show
+
 [cmddone_skip_hist]
     summary = "Command done"
     history_ignore = yes
