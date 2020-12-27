@@ -34,4 +34,7 @@ BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
 ColorForeground=#eeeeee
 ScrollingLines=2000
+DropdownAlwaysShowTabs=FALSE
+DropdownKeepOpenDefault=TRUE
+DropdownHeight=40
 

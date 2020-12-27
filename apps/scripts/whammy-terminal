@@ -3,5 +3,5 @@
 # and a chocowammy shake
 
 #urxvt -bg rgba:0000/0000/0000/d800 --depth 32 $@
-xfce4-terminal --disable-server
+xfce4-terminal --disable-server $@
 
