@@ -37,4 +37,5 @@ ScrollingLines=2000
 DropdownAlwaysShowTabs=FALSE
 DropdownKeepOpenDefault=TRUE
 DropdownHeight=40
+DropdownStatusIcon=FALSE
 
