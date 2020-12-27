@@ -221,6 +221,8 @@ nmap <Leader>w :w<CR>
 " make <Leader>x close the current buffer (without closing the window)
 nmap <Leader>x <Plug>BufKillBw
 
+nnoremap <Leader>l :set cursorline! cursorcolumn!<CR>
+
 " -----------------------------------------
 " --------- window split bullshit ---------
 " -----------------------------------------
@@ -402,6 +404,7 @@ if has("gui_running")
 	endif
 
 	" set up a good GUI colorschema
+	let g:jellybeans_background_color = "151515"
 	autocmd GUIEnter * colorscheme jellymod
 
 	" remove horrible toolbar
@@ -433,6 +436,9 @@ if has("gui_running")
 		set lines=999 columns=999
 		set toolbar=
 	endif
+
+	" highlight current line
+	set cursorline
 else
 	set mouse=
 endif
