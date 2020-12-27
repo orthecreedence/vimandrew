@@ -281,6 +281,7 @@ for_window [window_role="About"] floating enable
 for_window [class="(?i)firefox"] border pixel 0
 for_window [class="(?i)google-chrome"] border pixel 0
 for_window [class="(?i)urxvt"] border pixel 3
+for_window [class="(?i)xfce4-terminal"] border pixel 3
 for_window [class="(?i)conky"] border pixel 0
 for_window [class="(?i)dunst"] floating enable
 for_window [class="(?i)thunar"] floating enable
