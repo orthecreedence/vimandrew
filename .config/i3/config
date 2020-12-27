@@ -44,6 +44,7 @@ exec --no-startup-id nm-applet
 
 # gotta sync the ol' ball and chain heh heh
 exec --no-startup-id seafile-applet
+exec --no-startup-id seadrive-gui
  
 exec --no-startup-id redshift-gtk
 exec --no-startup-id ~/apps/scripts/disable-touchpad-click-while-typing.sh
