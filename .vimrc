@@ -221,7 +221,7 @@ nmap <Leader>w :w<CR>
 " make <Leader>x close the current buffer (without closing the window)
 nmap <Leader>x <Plug>BufKillBw
 
-nnoremap <Leader>l :set cursorline! cursorcolumn!<CR>
+nnoremap <Leader>l :set cursorline!<CR>
 
 " -----------------------------------------
 " --------- window split bullshit ---------
@@ -438,7 +438,7 @@ if has("gui_running")
 	endif
 
 	" highlight current line
-	set cursorline
+	"set cursorline
 else
 	set mouse=
 endif
