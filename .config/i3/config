@@ -290,7 +290,7 @@ for_window [class="(?i)thunar"] floating enable
 for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)seafile client"] floating enable
 for_window [class="(?i)audacious"] floating enable
-for_window [class="(?i)keepassxc"] floating enable
+#for_window [class="(?i)keepassxc"] floating enable
 for_window [class="(?i)pavucontrol"] floating enable
 
 # ------------------------------------------------------------------------------
