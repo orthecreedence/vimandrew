@@ -204,14 +204,14 @@ map! <S-Insert> <C-R>+
 noremap <S-Insert>	"+P
 vnoremap <S-Insert>	"+P
 inoremap <S-Insert>	<C-R>+
-map <C-v> <C-R>+
-map! <C-v> <C-R>+
-noremap <C-v>	"+P
-vnoremap <C-v>	"+P
-inoremap <C-v>	<C-R>+
+map <C-S-v> <C-R>+
+map! <C-S-v> <C-R>+
+noremap <C-S-v>	"+P
+vnoremap <C-S-v>	"+P
+inoremap <C-S-v>	<C-R>+
 
 " allow ctrl+c to copy into clipboard in visual mode
-vnoremap <C-c>  "+y
+vnoremap <C-S-c>  "+y
 
 " ,y / ,p / ,P copies/pastes to system clipboard
 vmap <Leader>y "+y
