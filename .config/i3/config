@@ -15,7 +15,7 @@
 
 set $mod Mod4
 set $alt Mod1
-set $bg ~/media/photos/pripyat.jpg
+set $bg ~/media/photos/forest_41.jpg
 
 # ------------------------------------------------------------------------------
 # init
