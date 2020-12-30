@@ -279,19 +279,21 @@ bindsym Ctrl+Shift+Print exec --no-startup-id ~/apps/scripts/screenshot selectio
 # window rules
 # ------------------------------------------------------------------------------
 
+# floating
 for_window [window_role="About"] floating enable
-for_window [class="(?i)firefox"] border pixel 0
-for_window [class="(?i)google-chrome"] border pixel 0
-for_window [class="(?i)urxvt"] border pixel 3
-for_window [class="(?i)xfce4-terminal"] border pixel 3
-for_window [class="(?i)conky"] border pixel 0
 for_window [class="(?i)dunst"] floating enable
 for_window [class="(?i)thunar"] floating enable
 for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)seafile client"] floating enable
 for_window [class="(?i)audacious"] floating enable
 #for_window [class="(?i)keepassxc"] floating enable
-for_window [class="(?i)pavucontrol"] floating enable
+
+# borders and titles
+for_window [class="(?i)firefox" window_type="normal"] border pixel 0
+for_window [class="(?i)google-chrome" window_type="normal"] border pixel 0
+for_window [class="(?i)urxvt"] border pixel 3
+for_window [class="(?i)xfce4-terminal"] border pixel 3
+for_window [class="(?i)conky"] border pixel 0
 
 # ------------------------------------------------------------------------------
 # appearance
