@@ -127,11 +127,6 @@ imap <3-MiddleMouse> <Nop>
 map <4-MiddleMouse> <Nop>
 imap <4-MiddleMouse> <Nop>
 
-" makes <S-Insert> work even when inputting a command (ugh thank god). somehow
-" this still works even though we unmap MiddleMouse ^ oh well lol
-map <S-Insert> <MiddleMouse>
-map! <S-Insert> <MiddleMouse>
-
 " better searching (disregard case unless explicitely given caps)
 set incsearch
 set ignorecase
@@ -203,10 +198,21 @@ inoremap <C-S>		<C-O>:update<CR>
 inoremap kj <Esc>
 inoremap <C-c> <Esc>
 map ; :
-" Shift-insert pastes from clipboard
+" enable shift+insert and ctrl+v to paste from clipboard
+map <S-Insert> <C-R>+
+map! <S-Insert> <C-R>+
 noremap <S-Insert>	"+P
 vnoremap <S-Insert>	"+P
-inoremap <S-Insert>	<C-O>"+P
+inoremap <S-Insert>	<C-R>+
+map <C-v> <C-R>+
+map! <C-v> <C-R>+
+noremap <C-v>	"+P
+vnoremap <C-v>	"+P
+inoremap <C-v>	<C-R>+
+
+" allow ctrl+c to copy into clipboard in visual mode
+vnoremap <C-c>  "+y
+
 " ,y / ,p / ,P copies/pastes to system clipboard
 vmap <Leader>y "+y
 vmap <Leader>d "+d
