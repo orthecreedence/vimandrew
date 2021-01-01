@@ -235,7 +235,7 @@ bindsym $mod+Shift+4 exec thunar
 bindsym $mod+Shift+5 exec google-chrome-stable
 bindsym $mod+Shift+6 exec gnome-calculator
 bindsym Ctrl+$alt+k exec keepassxc
-bindsym $mod+t exec gnome-system-monitor
+bindsym $mod+t [class="(?i)turtl"] focus
 # win+del
 bindcode $mod+119 exec gnome-system-monitor
 # win+.

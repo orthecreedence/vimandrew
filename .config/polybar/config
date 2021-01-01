@@ -409,9 +409,10 @@ animation-discharging-framerate = 750
 
 [module/temperature]
 type = internal/temperature
-thermal-zone = 0
-base-temperature = 20
-warn-temperature = 60
+thermal-zone = 3
+base-temperature = 40
+warn-temperature = 80
+hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon5/temp1_input
 
 format = <ramp> <label>
 format-underline = #f50a4d
