@@ -49,6 +49,7 @@ exec --no-startup-id seadrive-gui
 exec --no-startup-id redshift-gtk
 exec --no-startup-id ~/apps/scripts/disable-touchpad-click-while-typing.sh
 
+exec_always --no-startup-id xfce4-power-manager
 exec_always --no-startup-id feh --bg-fill $bg
 exec_always --no-startup-id dunst
 exec_always --no-startup-id lxpolkit
