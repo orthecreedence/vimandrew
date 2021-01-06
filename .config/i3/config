@@ -49,7 +49,7 @@ exec --no-startup-id seadrive-gui
 exec --no-startup-id redshift-gtk
 exec --no-startup-id ~/apps/scripts/disable-touchpad-click-while-typing.sh
 
-exec_always --no-startup-id xfce4-power-manager
+exec_always --no-startup-id xfce4-power-manager --restart
 exec_always --no-startup-id feh --bg-fill $bg
 exec_always --no-startup-id dunst
 exec_always --no-startup-id lxpolkit
@@ -235,9 +235,9 @@ bindsym $mod+Shift+3 exec ~/apps/scripts/whammy-terminal
 bindsym $mod+Shift+4 exec thunar
 bindsym $mod+Shift+5 exec google-chrome-stable
 bindsym $mod+Shift+6 exec gnome-calculator
-bindsym Ctrl+$alt+k exec keepassxc
-bindsym $mod+t [class="(?i)turtl"] focus
-bindsym $mod+p [class="(?i)keepassxc"] focus
+#bindsym Ctrl+$alt+k exec keepassxc
+bindsym $mod+t exec --no-startup-id ~/apps/scripts/toggle-scratch turtl Turtl 1.0
+bindsym $mod+p exec --no-startup-id ~/apps/scripts/toggle-scratch keepassxc KeePassXC 1.0
 # win+del
 bindcode $mod+119 exec gnome-system-monitor
 # win+.
@@ -293,6 +293,7 @@ for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)seafile client"] floating enable
 for_window [class="(?i)audacious"] floating enable
 #for_window [class="(?i)keepassxc"] floating enable
+#for_window [class="(?i)turtl"] floating enable
 
 # borders and titles
 for_window [class="(?i)gnome-*"] border normal 3
@@ -301,6 +302,10 @@ for_window [class="(?i)google-chrome" window_type="normal"] border pixel 0
 for_window [class="(?i)urxvt"] border pixel 3
 for_window [class="(?i)xfce4-terminal"] border pixel 3
 for_window [class="(?i)conky"] border pixel 0
+
+# auto-scratch (toggle via toggle-scratch)
+for_window [class="(?i)turtl"] move scratchpad
+for_window [class="(?i)keepassxc"] move scratchpad
 
 # ------------------------------------------------------------------------------
 # appearance

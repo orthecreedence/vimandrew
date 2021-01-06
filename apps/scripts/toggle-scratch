@@ -1,0 +1,15 @@
+#!/bin/bash
+
+export PATH=$PATH:~/apps/scripts
+app=$1
+class=$2
+delay=${3:-0.2}
+
+
+
+if [ "$(xdotool search --classname ${class} getwindowname)" == "" ]; then
+	${app} &
+	sleep ${delay}
+fi
+i3-msg "[class="'"'"(?i)${class}"'"'"] scratchpad show"
+
