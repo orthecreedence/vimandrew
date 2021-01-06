@@ -32,7 +32,7 @@ error = #fb4934
 alert = #bd2c40
 
 [i3colors]
-background = #dd000000
+background = #aa000000
 darkred = #ac444d
 darkblue = #3d5c6a
 magenta = #d3869b
