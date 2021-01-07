@@ -305,7 +305,7 @@ for_window [class="(?i)conky"] border pixel 0
 
 # auto-scratch (toggle via toggle-scratch)
 for_window [class="(?i)turtl"] move scratchpad
-for_window [class="(?i)keepassxc"] move scratchpad
+for_window [class="(?i)keepassxc" window_type="normal"] move scratchpad
 
 # ------------------------------------------------------------------------------
 # appearance
