@@ -26,9 +26,12 @@ exec_always --no-startup-id xset r rate 500 25
 # set screen saver to start after Ns and then loop after Ys
 # NOTE: this signals xss-lock to load the dim-screen.sh script after Ns and then
 # once Ys has passed, lock the screen
-exec_always --no-startup-id xset s 300 30
+# DOUBLENOTE: this is disabled because i'm trying out xfce4-power-manager LOL
+#exec_always --no-startup-id xset s 300 30
+
 # monitor power management
-exec_always --no-startup-id ~/apps/scripts/support/screen-timeout normal
+# NOTE: disabled because going to try xfce4-power-manager
+#exec_always --no-startup-id ~/apps/scripts/support/screen-timeout normal
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
@@ -235,9 +238,8 @@ bindsym $mod+Shift+3 exec ~/apps/scripts/whammy-terminal
 bindsym $mod+Shift+4 exec thunar
 bindsym $mod+Shift+5 exec google-chrome-stable
 bindsym $mod+Shift+6 exec gnome-calculator
-#bindsym Ctrl+$alt+k exec keepassxc
 bindsym $mod+t exec --no-startup-id ~/apps/scripts/toggle-scratch turtl Turtl 1.0
-bindsym $mod+p exec --no-startup-id ~/apps/scripts/toggle-scratch keepassxc KeePassXC 1.0
+bindsym Ctrl+$alt+k exec --no-startup-id ~/apps/scripts/toggle-scratch keepassxc KeePassXC 1.0
 # win+del
 bindcode $mod+119 exec gnome-system-monitor
 # win+.
