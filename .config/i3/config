@@ -294,6 +294,7 @@ for_window [class="(?i)thunar"] floating enable
 for_window [class="(?i)gnome-calculator"] floating enable
 for_window [class="(?i)seafile client"] floating enable
 for_window [class="(?i)audacious"] floating enable
+for_window [class="(?i)Pavucontrol"] floating enable
 #for_window [class="(?i)keepassxc"] floating enable
 #for_window [class="(?i)turtl"] floating enable
 
@@ -306,7 +307,7 @@ for_window [class="(?i)xfce4-terminal"] border pixel 3
 for_window [class="(?i)conky"] border pixel 0
 
 # auto-scratch (toggle via toggle-scratch)
-for_window [class="(?i)turtl"] move scratchpad
+for_window [class="(?i)turtl" title="(?i)Turtl"] move scratchpad
 for_window [class="(?i)keepassxc" window_type="normal"] move scratchpad
 
 # ------------------------------------------------------------------------------
