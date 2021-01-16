@@ -16,17 +16,49 @@ fi
 
 PAUSED_STATUS="$(dunstctl is-paused)"
 
-function cleanup {
-	dunstctl set-paused $PAUSED_STATUS
+function pre_lock {
+	dunstctl set-paused true
+	sleep 0.2
+	dunstctl set-paused true
+	return
 }
 
-trap cleanup EXIT HUP INT TERM
+function post_lock {
+	dunstctl set-paused $PAUSED_STATUS
+	return
+}
 
-dunstctl set-paused true
-sleep 0.2
-dunstctl set-paused true
-res=$(xdpyinfo | grep dimens | awk '{print $2}')
-convert $img -gravity center -resize ${res}^ -crop ${res}+0+0 +repage -brightness-contrast -5x0 -blur 24x24 RGB:- \
-	| /usr/bin/i3lock -e --raw ${res}:rgb --image /dev/stdin $@
-cleanup
+function do_lock {
+	res=$(xdpyinfo | grep dimens | awk '{print $2}')
+
+	cmd_img="convert $img -gravity center -resize ${res}^ -crop ${res}+0+0 +repage -brightness-contrast -5x0 -blur 24x24 RGB:-"
+	cmd_lock="/usr/bin/i3lock -e --raw ${res}:rgb --image /dev/stdin $@"
+
+	if [[ -e /dev/fd/${XSS_SLEEP_LOCK_FD:--1} ]]; then
+		kill_i3lock() {
+			pkill -xu $EUID "$@" i3lock
+		}
+
+		trap kill_i3lock TERM INT
+
+		# we have to make sure the locker does not inherit a copy of the lock fd
+		${cmd_img} | ${cmd_lock} {XSS_SLEEP_LOCK_FD}<&-
+
+		# now close our fd (only remaining copy) to indicate we're ready to sleep
+		exec {XSS_SLEEP_LOCK_FD}<&-
+
+		while kill_i3lock -0; do
+			sleep 0.5
+		done
+	else
+		trap 'kill %%' TERM INT
+		${cmd_img} | ${cmd_lock} --nofork  &
+		wait
+	fi
+}
+
+#trap post_lock EXIT HUP INT TERM
+pre_lock
+do_lock
+post_lock
 

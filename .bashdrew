@@ -5,6 +5,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export GIT_MERGE_AUTOEDIT=no
 export NODE_NO_WARNINGS=1
 export LC_COLLATE=C
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/apps/lib
 
 alias ls='ls --color=auto'
 alias fcd='source fcd-loader'
