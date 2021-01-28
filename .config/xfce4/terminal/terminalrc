@@ -28,7 +28,7 @@ MiscSlimTabs=FALSE
 MiscNewTabAdjacent=FALSE
 MiscSearchDialogOpacity=100
 MiscShowUnsafePasteDialog=TRUE
-FontName=DejaVu Sans Mono 12
+FontName=Roboto Mono 11
 ColorPalette=rgb(17,17,17);rgb(179,37,37);rgb(123,170,82);rgb(221,221,19);rgb(108,108,255);rgb(183,48,151);rgb(6,152,154);rgb(171,171,171);rgb(102,102,102);rgb(213,44,44);rgb(169,220,0);rgb(221,221,19);rgb(108,108,255);rgb(184,111,166);rgb(73,233,236);rgb(249,249,249)
 BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
@@ -38,4 +38,6 @@ DropdownAlwaysShowTabs=FALSE
 DropdownKeepOpenDefault=TRUE
 DropdownHeight=40
 DropdownStatusIcon=FALSE
+TitleMode=TERMINAL_TITLE_REPLACE
+CellHeightScale=1.100000
 
