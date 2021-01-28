@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export PATH=$PATH:$HOME/apps/scripts
+
+whammy-terminal --dynamic-title-mode=replace -e xvim
+

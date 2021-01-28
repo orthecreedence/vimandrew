@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd ~/dev && \
+	vim \
+		-c 'set mouse=a' \
+		-c 'set termguicolors' \
+		-c 'hi Normal guibg=NONE' \
+		-c 'hi EndOfBuffer guibg=NONE' \
+		"$@"
+
