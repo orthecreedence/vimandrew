@@ -7,6 +7,10 @@ set encoding=utf-8
 " make viminfo forget the last files edited
 set viminfo='0,/0,:0,<0,@0,f0
 
+let &t_SI = "\<esc>[5 q"
+let &t_SR = "\<esc>[3 q"
+let &t_EI = "\<esc>[2 q"
+
 " make vim act like any mswindows (or ANY) editor...lots of useful stuff, like 
 " shift text selection, movement/deletion line wrapping and the like. lots of
 " shorcuts to keep you from having to switch from insert to visual/command 
@@ -136,10 +140,8 @@ set smartcase
 syntax on
 set t_Co=256
 
-" obviously, the only real choice...the universally renowned void colorscheme
-"colorscheme void
-" psyche. let's do modified jellybean
-colorscheme void
+" color scheme
+colorscheme jellymod
 
 " highlight matching brackets/braces/etc, only highlight for 1/10th of a
 " second after a mtch is made
@@ -409,10 +411,6 @@ if has("gui_running")
 		autocmd GUIEnter * set visualbell t_vb=
 	endif
 
-	" set up a good GUI colorschema
-	let g:jellybeans_background_color = "151515"
-	autocmd GUIEnter * colorscheme jellymod
-
 	" remove horrible toolbar
 	" NOTE: putting this as its own command (without GUIEnter) hangs on
 	" startup =[
@@ -447,5 +445,10 @@ if has("gui_running")
 	"set cursorline
 else
 	set mouse=
+endif
+
+" load a non-versioned set of local commands, if they are present
+if filereadable(expand("~/.vim/localrc"))
+	source ~/.vim/localrc
 endif
 
