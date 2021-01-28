@@ -1,0 +1,12 @@
+# ctrl-backspace
+"\C-h":shell-backward-kill-word
+
+# ctrl-delete
+"\e[3;5~":shell-kill-word
+
+# ctrl-right-arrow
+"\e[1;5C":shell-forward-word
+
+# ctrl-left-arrow
+"\e[1;5D":shell-backward-word
+

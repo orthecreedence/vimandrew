@@ -7,6 +7,7 @@ set encoding=utf-8
 " make viminfo forget the last files edited
 set viminfo='0,/0,:0,<0,@0,f0
 
+" makes our cursor work better in vim (vs gvim)
 let &t_SI = "\<esc>[5 q"
 let &t_SR = "\<esc>[3 q"
 let &t_EI = "\<esc>[2 q"
@@ -25,6 +26,9 @@ set fileformats=unix,dos
 " Makes vim not overwrite permissions in cygwin files.
 set backupcopy=yes
 
+" keep swap/backup files from writing
+set nobackup
+set noswapfile
 set noundofile
 
 "set timeoutlen=500
@@ -187,15 +191,17 @@ set nu
 "set mousefocus
 
 " -----------------------------------------
+" --------- window split bullshit ---------
+" -----------------------------------------
+set splitright
+set splitbelow
+
+" -----------------------------------------
 " --------- general key bindings ----------
 " -----------------------------------------
 " <Leader>h will turn ON search highlighting. C-c will temporarily disable it
 " for a specific search.
 nmap <Leader>h :set hls!<CR>
-" Use CTRL-S for saving, also in Insert mode
-noremap <C-S>		:update<CR>
-vnoremap <C-S>		<C-C>:update<CR>
-inoremap <C-S>		<C-O>:update<CR>
 " allow typing kj quickly to map to Esc 
 inoremap kj <Esc>
 inoremap <C-c> <Esc>
@@ -211,6 +217,10 @@ inoremap <S-Insert>	<C-R>+
 "noremap <C-S-v>	"+P
 "vnoremap <C-S-v>	"+P
 "inoremap <C-S-v>	<C-R>+
+
+" Ctrl+backspace deletes previous word
+imap <C-BS> <C-W>
+imap <C-H> <C-W>
 
 " allow ctrl+c to copy into clipboard in visual mode
 vnoremap <C-S-c>  "+y
@@ -231,47 +241,23 @@ nmap <Leader>x <Plug>BufKillBw
 
 nnoremap <Leader>l :set cursorline!<CR>
 
-" -----------------------------------------
-" --------- window split bullshit ---------
-" -----------------------------------------
-set splitright
-set splitbelow
-
-" -----------------------------------------
-" --------- some shell remappings ---------
-" -----------------------------------------
-
 nmap <Leader>u :UndotreeToggle<CR>
 
 " make ctrl+pageup/down control our buffer selection
 map <C-PageUp> :tabp <CR>
 map <C-PageDown> :tabn <CR>
 
-" Ctrl+backspace deletes previous word
-imap <C-BS> <C-W>
-
-" tab/shift+tab on selected text indents
-" NOTE: disabled because, like, use visual block mode?
-"vmap <Tab> >gv
-"vmap <S-Tab> <gv
-
-" make arrow keys work in visual mode - NOTE - disabled because it interferes
-" with windows mode
-"vnoremap <Left> h
-"vnoremap <Right> l
-"vnoremap <Up> k
-"vnoremap <Down> j
-
-" FUF mappings
-"map <F3> :FufDir <CR>
-"map <F4> :FufCoverageFile <CR>
-"map <Leader>b :FufBuffer <CR>
-"let g:fuf_enumeratingLimit = 100
-
 " CtrlP mappings
 map <F4> :CtrlP<CR>
 map <Leader>o :CtrlP<CR>
 map <Leader>b :CtrlPBuffer<CR>
+" F9 toggles NERDTree
+map <F9> :NERDTreeToggle <CR>
+
+" -----------------------------------------
+" ------------- Plugin config -------------
+" -----------------------------------------
+
 let g:ctrlp_max_height=15
 let g:ctrlp_working_path_mode=''
 let g:ctrlp_jump_to_buffer=0
@@ -286,20 +272,6 @@ if has("win32") || has("win16")
 else
 	set wildignore+=*/tmp/*.*.zip,*.exe,*/.git/*,*/node_modules/*,*/bower_components/*
 endif
-
-
-" F9 toggles NERDTree
-map <F9> :NERDTreeToggle <CR>
-
-if has("win32") || has("win16")
-	nmap <Leader>sh :ConqueTermSplit c:\cygwin\cygwin.bat<CR>
-else
-	nmap <Leader>sh :ConqueTermSplit bash<CR>
-endif
-
-" -----------------------------------------
-" ------------- Plugin config -------------
-" -----------------------------------------
 
 let g:BufKillActionWhenBufferDisplayedInAnotherWindow = 'kill'
 
@@ -326,10 +298,6 @@ let g:miniBufExplorerMoreThanOne=2
 " <TAB> behaves like bash, not DOS
 set wildmode=longest:full
 set wildmenu
-
-" keep swap/backup files from writing
-set nobackup
-set noswapfile
 
 " ------------ Lisp/slimv shit ------------
 let g:swank_log = 0

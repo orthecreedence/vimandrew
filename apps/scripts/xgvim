@@ -2,5 +2,8 @@
 
 export PATH=$PATH:$HOME/apps/scripts
 
-whammy-terminal --dynamic-title-mode=replace -e xvim
+xfce4-terminal \
+	--dynamic-title-mode=replace \
+	--font='Roboto Mono 11' \
+	-e xvim
 
