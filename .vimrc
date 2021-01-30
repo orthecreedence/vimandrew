@@ -145,7 +145,21 @@ syntax on
 set t_Co=256
 
 " color scheme
-colorscheme jellymod
+"colorscheme jellymod
+let g:jellybeans_overrides = {
+\    'background': { 'ctermbg': 'none', '256ctermbg': 'none' },
+\    'Todo': { 'guifg': 'dba065', 'guibg': '333333', 'attr': 'bold' },
+\    'StatusLine': { 'guifg': 'ffffff', 'guibg': '444444', 'attr': '' },
+\    'StatusLineNC': { 'guifg': 'cccccc', 'guibg': '222222', 'attr': '' },
+\    'Comment': { 'attr': '' },
+\    'VertSplit': { 'guifg': '222222', 'guibg': '222222', 'attr': '' },
+\    'ColorColumn': { 'guibg': '004444' },
+\    'Statement': { 'guifg': '81b7bf' },
+\}
+if has('termguicolors') && &termguicolors
+    let g:jellybeans_overrides['background']['guibg'] = 'none'
+endif
+colorscheme jellybeans17
 
 " highlight matching brackets/braces/etc, only highlight for 1/10th of a
 " second after a mtch is made
