@@ -242,6 +242,7 @@ bindsym $mod+Shift+5 exec google-chrome-stable
 bindsym $mod+Shift+6 exec gnome-calculator
 bindsym $mod+t exec --no-startup-id ~/apps/scripts/toggle-scratch turtl Turtl 1.0
 bindsym Ctrl+$alt+k exec --no-startup-id ~/apps/scripts/toggle-scratch keepassxc KeePassXC 1.0
+bindsym $mod+v [class="(?i)vlc"] scratchpad show
 # win+del
 bindcode $mod+119 exec gnome-system-monitor
 # win+.
