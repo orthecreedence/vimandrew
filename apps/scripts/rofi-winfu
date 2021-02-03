@@ -2,7 +2,13 @@
 #
 # Usage: rofi -modi winfu:./rofi-winfu -show winfu
 
+# don't show the current window in the list
 HIDE_CURRENT_WINDOW=1
+# don't show windows that aren't on a specific workspace. in most window mgrs,
+# this refers to a window on all workspaces. on i3, it refers to scratchpad wins.
+# makes sense to set to 1 in i3 because rofi can't show scratchpad windows
+# anyways.
+HIDE_WORKSPACELESS_WINDOWS=1
 # Note this separator is actually a wonky unicode char that looks like a space
 # but doesn't trigger rofi's tokenizing heh heh
 SEP=' '
@@ -23,6 +29,10 @@ if [ "$1" == "" ]; then
 		desktop_name="$(echo "${desktops}" | grep "^${desktop_id} " | awk '{$1=""; print $0}' | sed 's/^ \+//')"
 		title="$(echo "${line}" | awk '{$1 = ""; $2 = ""; $3 = ""; print $0}' | sed 's/^ \+//')"
 		class="$(xprop -id ${id} WM_CLASS | sed 's/.*, //' | sed 's/"//g')"
+
+		if [ "${desktop_id}" == "-1" ] && [ "${HIDE_WORKSPACELESS_WINDOWS}" == "1" ]; then
+			continue;
+		fi
 
 		if [ "${HIDE_CURRENT_WINDOW}" == "1" ]; then
 			if [ "${id}" == "${cur_win}" ]; then
