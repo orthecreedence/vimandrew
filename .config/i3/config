@@ -238,8 +238,7 @@ bindsym $mod+Shift+2 exec ~/apps/scripts/xgvim
 bindsym $mod+Shift+3 exec ~/apps/scripts/whammy-terminal
 #bindsym $mod+Shift+3 exec i3-sensible-terminal
 bindsym $mod+Shift+4 exec thunar
-bindsym $mod+Shift+5 exec google-chrome-stable
-bindsym $mod+Shift+6 exec gnome-calculator
+bindsym $mod+Shift+5 exec gnome-calculator
 bindsym $mod+t exec --no-startup-id ~/apps/scripts/toggle-scratch turtl Turtl 1.0
 bindsym Ctrl+$alt+k exec --no-startup-id ~/apps/scripts/toggle-scratch keepassxc KeePassXC 1.0
 bindsym $mod+v [class="(?i)vlc"] scratchpad show
@@ -323,6 +322,7 @@ default_border normal 3
 default_floating_border normal 3
 
 title_align center
+for_window [class=".*"] title_format "    <span font_weight='normal' alpha='100%'>%title</span>    "
 font pango:DejaVu Sans Mono 11
 
 set $background  #000000dd
