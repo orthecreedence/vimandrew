@@ -1,4 +1,4 @@
 #!/bin/bash
 
-dstat -lrvn -D /dev/nvme0n1p1 10
+dstat -rvn -D /dev/nvme0n1p3 10
 
