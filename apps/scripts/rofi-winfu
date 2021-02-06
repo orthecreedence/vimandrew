@@ -2,13 +2,18 @@
 #
 # Usage: rofi -modi winfu:./rofi-winfu -show winfu
 
+# For profiling. set #!/bin/bash -x and enable this line:
+#PS4='+ $(date "+%s.%N ($LINENO) ")'
+
 # don't show the current window in the list
 HIDE_CURRENT_WINDOW=1
 # don't show windows that aren't on a specific workspace. in most window mgrs,
 # this refers to a window on all workspaces. on i3, it refers to scratchpad wins.
-# makes sense to set to 1 in i3 because rofi can't show scratchpad windows
-# anyways.
-HIDE_WORKSPACELESS_WINDOWS=1
+HIDE_WORKSPACELESS_WINDOWS=0
+# Hide windows in a specific workspace. Generally this is used if you have a
+# "dumping ground" workspace where you keep things you rotate in and out of
+# active service.
+HIDE_WORKSPACE="10"
 # Note this separator is actually a wonky unicode char that looks like a space
 # but doesn't trigger rofi's tokenizing heh heh
 SEP=' '
@@ -17,40 +22,48 @@ SEP=' '
 SPLIT='Ͻ'
 
 if [ "$1" == "" ]; then
+	cur_win="0x00000000"
 	if [ "${HIDE_CURRENT_WINDOW}" == "1" ]; then
 		cur_win=$(printf "0x%08X" $(xdotool getwindowfocus))
 	fi
 	cur_desktop="<nope>"
-	desktops="$(wmctrl -d | awk '{$2=""; $3=""; $4=""; $5=""; $6=""; $7=""; $8=""; print $0}')"
+	desktops="$(wmctrl -d | cut -d ' ' -f 1,12- | perl -pe 's/ +/ /g')"
+	declare -A desktop_name_idx
+	while IFS= read -r line; do
+		id=$(echo $line | cut -d ' ' -f 1)
+		name=$(echo $line | cut -d ' ' -f 2-)
+		desktop_name_idx+=([$id]=$name)
+	done <<< "$(echo "$desktops")"
 	res=""
 	while IFS= read -r line; do
-		id="$(echo "${line}" | awk '{print $1}')"
-		desktop_id="$(echo "${line}" | awk '{print $2}')"
-		desktop_name="$(echo "${desktops}" | grep "^${desktop_id} " | awk '{$1=""; print $0}' | sed 's/^ \+//')"
-		title="$(echo "${line}" | awk '{$1 = ""; $2 = ""; $3 = ""; print $0}' | sed 's/^ \+//')"
-		class="$(xprop -id ${id} WM_CLASS | sed 's/.*, //' | sed 's/"//g')"
+		id="$(echo "${line}" | cut -d ' ' -f 1)"
+		desktop_id="$(echo "${line}" | cut -d ' ' -f 2)"
 
 		if [ "${desktop_id}" == "-1" ] && [ "${HIDE_WORKSPACELESS_WINDOWS}" == "1" ]; then
 			continue;
 		fi
 
-		if [ "${HIDE_CURRENT_WINDOW}" == "1" ]; then
-			if [ "${id}" == "${cur_win}" ]; then
-				continue;
-			fi
+		desktop_name="${desktop_name_idx[$desktop_id]}"
+
+		if [ "${HIDE_WORKSPACE}" == "${desktop_name}" ]; then
+			continue;
 		fi
 
-		winline="W:${desktop_name}${SPLIT}${class}${SPLIT}${title}${SPLIT}${id}"
+		class="$(echo "${line}" | cut -d ' ' -f 3 | cut -d '.' -f 2)"
+		title="$(echo "${line}" | cut -d ' ' -f 5- | cut -c -100)"
+
+		winline="W:${desktop_name:-"-"}${SPLIT}${class}${SPLIT}${title}${SPLIT}${id}"
 		if [ "${res}" == "" ]; then
 			res="${winline}"
 		else
 			res="${res}"$'\n'"${winline}"
 		fi
-	done <<< "$(wmctrl -l)"
+	done <<< "$(wmctrl -lx | grep -v "^${cur_win}" | perl -pe 's/ +/ /g')"
 	echo "${res}" \
-			| column -t -s "${SPLIT}" -o "${SEP}${SEP}"
+		| column -t -s "${SPLIT}" -o "${SEP}${SEP}"
 else
-	id=$(echo "$1" | sed 's/.*0x/0x/')
-	wmctrl -i -a ${id}
+	id=$(echo "$1" | perl -pe 's/.*0x/0x/')
+	xdotool windowactivate ${id}
+	#wmctrl -i -a ${id}
 fi
 
