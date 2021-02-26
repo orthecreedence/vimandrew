@@ -28,7 +28,7 @@ lsblk -o +UUID
 vim /etc/default/grub
 
   - GRUB_CMDLINE_LINUX="cryptdevice=UUID=<DEVSDA2UUID>:<name> root=/dev/<GName>/root"
-  - GRUB_CMDLINE_LINUX_DEFAULT="... button.lid_init_state=open" # Razer blade suspend loop fix
+  - GRUB_CMDLINE_LINUX_DEFAULT="... loglevel=3 button.lid_init_state=open nvme_core.default_ps_max_latency_us=5500" # Razer blade suspend loop fix, samsung ssd fix
 
 grub-install –boot-directory=/boot –efi-directory=/boot/efi /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg

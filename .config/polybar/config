@@ -68,7 +68,7 @@ font-3 = Font Awesome 5 Free,Font Awesome 5 Free Solid:style=Solid:size=13;4
 
 modules-left = i3
 modules-center = 
-modules-right = wlan eth cpu memory battery temperature pulseaudio date
+modules-right = wlan eth cpu memory battery temperature pulseaudio notifications date
 
 tray-position = right
 tray-padding = 4
@@ -280,6 +280,13 @@ format-disconnected =
 ;label-disconnected = %ifname% disconnected
 ;label-disconnected-foreground = ${colors.foreground-alt}
 
+[module/notifications]
+type = custom/script
+exec = ~/.config/polybar/scripts/notifications.sh display
+interval = 1
+click-left = ~/.config/polybar/scripts/notifications.sh toggle
+;format-foreground = ${colors.secondary}
+
 [module/date]
 type = internal/date
 interval = 5
@@ -405,7 +412,7 @@ animation-discharging-framerate = 750
 type = internal/temperature
 thermal-zone = 3
 base-temperature = 40
-warn-temperature = 80
+warn-temperature = 85
 hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon5/temp1_input
 
 format = <ramp> <label>

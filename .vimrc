@@ -284,7 +284,12 @@ let g:ctrlp_custom_ignore = {
 if has("win32") || has("win16")
 	set wildignore+=*\\tmp\\*.*.zip,*.exe,*\\.git\\*,*\\node_modules\\*,*\\bower_components\\*
 else
-	set wildignore+=*/tmp/*.*.zip,*.exe,*/.git/*,*/node_modules/*,*/bower_components/*
+	set wildignore+=*.exe
+	set wildignore+=*.zip
+	set wildignore+=*/.git/*
+	set wildignore+=*/node_modules/*
+	set wildignore+=*/bower_components/*
+	set wildignore+=*/target/*
 endif
 
 let g:BufKillActionWhenBufferDisplayedInAnotherWindow = 'kill'
