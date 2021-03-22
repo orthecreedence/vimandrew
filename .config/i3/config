@@ -311,7 +311,7 @@ for_window [class="(?i)conky"] border pixel 0
 for_window [class="(?i)xfce4-terminal" title="(?i)n?vim$"] border normal 3
 
 # auto-scratch (toggle via toggle-scratch)
-for_window [class="(?i)turtl" title="(?i)Turtl"] move scratchpad
+for_window [class="(?i)turtl" title="(?i)^Turtl$"] move scratchpad
 for_window [class="(?i)keepassxc" window_type="normal"] move scratchpad
 
 # ------------------------------------------------------------------------------
