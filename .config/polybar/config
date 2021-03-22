@@ -291,8 +291,8 @@ click-left = ~/.config/polybar/scripts/notifications.sh toggle
 type = internal/date
 interval = 5
 
-date = " %a %b %d"
-date-alt = ""
+date = ""
+date-alt = " %a %b %d"
 
 time = "%l:%M %P"
 time-alt = "%l:%M %P"
