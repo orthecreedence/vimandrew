@@ -102,6 +102,11 @@ autocmd BufRead,BufNewFile *.toml set ft=toml
 
 autocmd BufRead,BufNewFile *.svelte set ft=svelte
 
+autocmd FileType dart setlocal expandtab
+autocmd FileType dart setlocal tabstop=2
+autocmd FileType dart setlocal shiftwidth=2
+autocmd FileType dart setlocal softtabstop=2
+
 autocmd FileType json setlocal expandtab
 autocmd FileType json setlocal tabstop=2
 autocmd FileType yml setlocal expandtab
