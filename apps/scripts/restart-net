@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+systemctl stop NetworkManager
+systemctl stop systemd-resolved
+systemctl stop wpa_supplicant
+
+sleep 5
+
+systemctl start wpa_supplicant
+systemctl start systemd-resolved
+systemctl start NetworkManager
