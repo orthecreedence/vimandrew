@@ -38,6 +38,9 @@ exec_always --no-startup-id xset r rate 500 25
 #exec --no-startup-id xss-lock --notifier=/home/andrew/apps/scripts/support/dim-screen.sh --transfer-sleep-lock -- /home/andrew/apps/scripts/locker $bg --nofork
 exec --no-startup-id xss-lock --transfer-sleep-lock -- /home/andrew/apps/scripts/locker $bg
 
+# enables alt-tab
+exec --no-startup-id ~/apps/scripts/i3-focus-last.py
+
 # restore volume
 # NOTE: not a thing anymore, thx pulseaudio
 #exec --no-startup-id alsactl --file ~/.config/asound.state restore 
@@ -187,7 +190,8 @@ bindcode $mod+112 workspace prev
 # win+pgdn
 bindcode $mod+117 workspace next
 # alt+tab
-bindcode $alt+23 workspace back_and_forth
+#bindcode $alt+23 workspace back_and_forth
+bindcode $alt+23 exec ~/apps/scripts/i3-focus-last.py --switch
 
 # move focused container to workspace
 bindsym $mod+Control+1 move container to workspace number $ws1
