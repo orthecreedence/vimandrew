@@ -58,7 +58,7 @@
     # The transparency of the window.  Range: [0; 100].
     # This option will only work if a compositing window manager is
     # present (e.g. xcompmgr, compiz, etc.).
-    transparency = 5
+    transparency = 10
 
     # The height of the entire notification.  If the height is smaller
     # than the font height and padding combined, it will be raised
@@ -103,7 +103,7 @@
 
     ### Text ###
 
-    font = DejaVu Sans Mono 12
+    font = DejaVu Sans Mono 11
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
@@ -322,7 +322,8 @@
     #icon = /path/to/icon
 
 [urgency_normal]
-    background = "#285577"
+    #background = "#285577"
+    background = "#444444"
     foreground = "#ffffff"
     timeout = 20
     # Icon for notifications with normal urgency, uncomment to enable
@@ -417,6 +418,11 @@
 [cmddone_skip_hist]
     summary = "Command done"
     history_ignore = yes
+
+[slack_logo]
+	appname = "Slack"
+	new_icon = "/usr/share/pixmaps/slack.png"
+
 
 #[espeak]
 #    summary = "*"

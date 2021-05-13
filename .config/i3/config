@@ -39,7 +39,7 @@ exec_always --no-startup-id xset r rate 500 25
 exec --no-startup-id xss-lock --transfer-sleep-lock -- /home/andrew/apps/scripts/locker $bg
 
 # enables alt-tab
-exec --no-startup-id ~/apps/scripts/i3-focus-last.py
+exec_always --no-startup-id ~/apps/scripts/i3-focus-last.py
 
 # restore volume
 # NOTE: not a thing anymore, thx pulseaudio
@@ -190,7 +190,7 @@ bindcode $mod+112 workspace prev
 # win+pgdn
 bindcode $mod+117 workspace next
 # alt+tab
-#bindcode $alt+23 workspace back_and_forth
+bindcode $mod+23 workspace back_and_forth
 bindcode $alt+23 exec ~/apps/scripts/i3-focus-last.py --switch
 
 # move focused container to workspace
@@ -235,7 +235,7 @@ bindsym $mod+g exec i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 # win+`
 bindcode $mod+49 exec --no-startup-id bash -c "rofi -show run"
 # win+tab
-bindcode $mod+23 exec --no-startup-id rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu
+#bindcode $mod+23 exec --no-startup-id rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu
 bindsym $alt+space exec --no-startup-id rofi -modi winfu:~/apps/scripts/rofi-winfu -show winfu
 bindsym $mod+Shift+1 exec firefox
 #bindsym $mod+Shift+2 exec bash -c "cd ~/dev && gvim"
