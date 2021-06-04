@@ -4,7 +4,7 @@
  * Copyright: Rasmus Steinke
  ******************************************************************************/
 * {
-    selected-normal-foreground:  rgba ( 200, 80, 80, 100 % );
+    selected-normal-foreground:  rgba ( 200, 200, 80, 100 % );
     foreground:                  rgba ( 129, 147, 150, 100 % );
     normal-foreground:           @foreground;
     alternate-normal-background: rgba ( 0, 43, 55, 0 % );
