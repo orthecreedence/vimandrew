@@ -423,6 +423,11 @@
 	appname = "Slack"
 	new_icon = "/usr/share/pixmaps/slack.png"
 
+[thunderbird_bullshit]
+	desktop_entry = "Thunderbird"
+    history_ignore = yes
+    skip_display = yes
+	script = ~/.config/dunst/thunderbird-notify.sh
 
 #[espeak]
 #    summary = "*"

@@ -65,6 +65,7 @@ font-0 = RobotoMono:size=11;3
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;4
 font-2 = Typicons:style=Regular:size=22;6
 font-3 = Font Awesome 5 Free,Font Awesome 5 Free Solid:style=Solid:size=13;4
+font-4 = Typicons:style=Regular:size=11;4
 
 modules-left = i3
 modules-center = 
@@ -249,7 +250,7 @@ interval = 2.0
 
 format-connected = <ramp-signal> <label-connected>
 format-connected-underline = #9f78e1
-label-connected = %downspeed% %upspeed%
+label-connected = %downspeed%%{F#7c9d63}%{T5} %{T-}%{F-} %upspeed%%{F#7c9d63}%{T5} %{T-}%{F-}
 
 format-disconnected =
 ;format-disconnected = <label-disconnected>
