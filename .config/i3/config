@@ -308,7 +308,6 @@ for_window [class="(?i)Pavucontrol"] floating enable
 # borders and titles
 for_window [class="(?i)gnome-*"] border normal 3
 for_window [class="(?i)firefox" window_type="normal"] border pixel 0
-for_window [class="(?i)thunderbird" window_type="normal"] border pixel 0
 for_window [class="(?i)google-chrome" window_type="normal"] border pixel 0
 for_window [class="(?i)urxvt"] border pixel 3
 for_window [class="(?i)xfce4-terminal"] border pixel 3
