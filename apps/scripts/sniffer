@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Quick guide: https://linuxhint.com/wireshark-command-line-interface-tshark/
+# Filters: https://biot.com/capstats/bpf.html
+
+tshark -i wlp59s0 -f 'not host 0.2.3.4'
+
